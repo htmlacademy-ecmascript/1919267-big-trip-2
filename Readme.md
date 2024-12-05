@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Татьяна Немчина](https://up.htmlacademy.ru/ecmascript-individual/2/user/1919267).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Андреев](https://htmlacademy.ru/profile/id812127).
 
 ---
 
