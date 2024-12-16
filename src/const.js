@@ -3,4 +3,6 @@ const Price = {
   MAX: 10000,
 };
 
-export {Price};
+const POINTS_COUNT = 4;
+
+export {Price, POINTS_COUNT};

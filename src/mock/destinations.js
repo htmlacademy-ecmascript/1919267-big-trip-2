@@ -1,6 +1,6 @@
 import { getRandomPositiveInteger } from '../utils/common.js';
 
-const destinations = [
+const mockDestinations = [
   {
     id: 'cdfc6dee-3b1d-43f7-9f70-f60ca05b5b06',
     name: 'Мадрид',
@@ -39,4 +39,4 @@ const destinations = [
   }
 ];
 
-export {destinations};
+export {mockDestinations};
