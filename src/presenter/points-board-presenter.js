@@ -9,17 +9,19 @@ export default class PointsBoardPresenter {
   pointsListComponent = new PointsListView();
   pointEditComponent = new PointEditView();
 
-  constructor({pointsBoardContainer}) {
+  constructor({pointsBoardContainer, pointsModel}) {
     this.pointsBoardContainer = pointsBoardContainer;
+    this.pointsModel = pointsModel;
   }
 
   init() {
+    this.boardPoints = [...isFinite.pointsModel.getPoints()];
     render(this.tripSortComponent, this.pointsBoardContainer);
     render(this.pointsListComponent, this.pointsBoardContainer);
     render(this.pointEditComponent, this.pointsListComponent.getElement(), RenderPosition.AFTERBEGIN);
 
-    for (let i = 0; i < 3; i++) {
-      render(new PointItemView(), this.pointsListComponent.getElement());
+    for (let i = 0; i < this.boardPoints.length; i++) {
+      render(new PointItemView({point: this.boardPoints[i]}), this.pointsListComponent.getElement());
     }
   }
 }
