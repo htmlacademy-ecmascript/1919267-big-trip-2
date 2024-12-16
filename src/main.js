@@ -1,3 +1,4 @@
+import { mockPoints } from './mock/points.js';
 import PointsBoardPresenter from './presenter/points-board-presenter.js';
 import { render, RenderPosition } from './render';
 import AddEventButtonView from './view/add-event-button-view.js';
@@ -13,3 +14,4 @@ render(new TripInfoView(), tripMainContainer, RenderPosition.AFTERBEGIN);
 render(new FiltersFormView(), filtersContainer);
 render(new AddEventButtonView(), tripMainContainer);
 pointsBoardPresenter.init();
+console.log('mockPoints', mockPoints);
