@@ -17,10 +17,10 @@ export default class PointsModel {
   }
 
   getOffersByType (type) {
-    return this.getOffers().find((offer) => offer.type === type);
+    return this.getOffers().find((offer) => offer.type === type).offers;
   }
 
-  getOfferById (type, offerIdsArray) {
+  getOffersById (type, offerIdsArray) {
     return this.getOffersByType(type).filter((offer) => offerIdsArray.find((id) => offer.id === id));
   }
 

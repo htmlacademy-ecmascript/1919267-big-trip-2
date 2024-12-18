@@ -5,8 +5,8 @@ const mockPoints = [
   {
     'id': '9d633166-6a3b-4e7d-9273-34b02554719a',
     'basePrice': getRandomPositiveInteger(Price.MIN, Price.MAX),
-    'dateFrom': '2024-04-23T01:15:05.048Z',
-    'dateTo': '2024-04-23T22:41:05.048Z',
+    'dateFrom': '2024-04-23T08:00:05.048Z',
+    'dateTo': '2024-04-23T09:59:05.048Z',
     'destination': 'cdfc6dee-3b1d-43f7-9f70-f60ca05b5b06',
     'isFavorite': Boolean(getRandomPositiveInteger(0, 1)),
     'offers': [
@@ -34,8 +34,8 @@ const mockPoints = [
     'id': '7d633166-6c3b-4e7d-9273-34b02554719c',
     'basePrice': getRandomPositiveInteger(Price.MIN, Price.MAX),
     'dateFrom': '2024-06-23T01:15:05.048Z',
-    'dateTo': '2024-06-23T22:41:05.048Z',
-    'destination': '9adb05f5-5a7e-4df1-a47b-079853d44bb3',
+    'dateTo': '2024-06-25T22:41:05.048Z',
+    'destination': '9428ea55-9370-48c4-9ff8-8b13b593cd00',
     'isFavorite': Boolean(getRandomPositiveInteger(0, 1)),
     'offers': [
       '0bc0fe2a-bad1-4224-a4c8-2f1756aeba0f',
@@ -46,9 +46,9 @@ const mockPoints = [
   {
     'id': '6d633166-6d3b-4e7d-9273-34b02554719d',
     'basePrice': getRandomPositiveInteger(Price.MIN, Price.MAX),
-    'dateFrom': '2024-07-23T01:15:05.048Z',
-    'dateTo': '2024-07-23T22:41:05.048Z',
-    'destination': '428ea55-9370-48c4-9ff8-8b13b593cd00',
+    'dateFrom': '2024-07-18T05:55:05.048Z',
+    'dateTo': '2024-07-20T15:38:05.048Z',
+    'destination': '5255dda8-f44d-45b6-8cb9-c8d7a73aeac4',
     'isFavorite': Boolean(getRandomPositiveInteger(0, 1)),
     'offers': [],
     'type': 'ship',
