@@ -1,4 +1,4 @@
-import { DATE_FORMAT } from '../const.js';
+import { DateFormat } from '../const.js';
 import { createElement } from '../render.js';
 import { getDuration, humanizePointDueDate } from '../utils/common.js';
 
@@ -9,16 +9,16 @@ function createPointItemTemplate(point, offers, destination) {
   return (
     `<li class="trip-events__item">
               <div class="event">
-                <time class="event__date" datetime=${dateFrom}>${humanizePointDueDate(dateFrom, DATE_FORMAT.monthDay)}</time>
+                <time class="event__date" datetime=${dateFrom}>${humanizePointDueDate(dateFrom, DateFormat.MONTH_DAY)}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
                 </div>
                 <h3 class="event__title">${type} ${name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
-                    <time class="event__start-time" datetime=${dateFrom}>${humanizePointDueDate(dateFrom, DATE_FORMAT.time)}</time>
+                    <time class="event__start-time" datetime=${dateFrom}>${humanizePointDueDate(dateFrom, DateFormat.TIME)}</time>
                     &mdash;
-                    <time class="event__end-time" datetime=${dateTo}>${humanizePointDueDate(dateTo, DATE_FORMAT.time)}</time>
+                    <time class="event__end-time" datetime=${dateTo}>${humanizePointDueDate(dateTo, DateFormat.TIME)}</time>
                   </p>
                   <p class="event__duration">${getDuration(dateFrom, dateTo)}</p>
                 </div>

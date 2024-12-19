@@ -3,38 +3,38 @@ import { getRandomPositiveInteger } from '../utils/common.js';
 const mockDestinations = [
   {
     id: 'cdfc6dee-3b1d-43f7-9f70-f60ca05b5b06',
-    name: 'Мадрид',
-    description: 'Cтолица Испании, признанная одним из красивейших городов мира. И это неудивительно, ведь здесь гармонично сочетаются современная и средневековая архитектура, а парковые комплексы достойны, чтобы по их аллеям совершали променад монаршие особы. Мадрид расположен в центральной части Пиренейского полуострова. “Сердце Испании” по совместительству является административным центром одноимённых провинции и автономного сообщества.',
+    name: 'Madrid',
+    description: 'The capital of Spain, recognized as one of the most beautiful cities in the world. And it\'s no wonder, because here modern and medieval architecture blend harmoniously, and the park complexes are worthy for royal figures to stroll along their alleys. Madrid is located in the central part of the Iberian Peninsula. The "heart of Spain" also serves as the administrative center of the province and autonomous community of the same name.',
     photos: Array.from({length: getRandomPositiveInteger(0, 5)}, () => `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`)
   },
   {
     id: '185f6061-5967-4a65-8a41-dd923c470eb3',
-    name: 'Лондон',
-    description: 'Cтолица Великобритании и один из величайших городов истории и современности. В Вестминстере работает правительство, здесь же расположены Букингемский дворец, самые лучшие национальные галереи, музеи, театры и клубы. Лондон бесконечно меняется: из римской, а затем раннесредневековой крепости он превратился в крупный город. После Великого лондонского пожара 1666 года он в буквальном смысле слова восстал из пепла, удивляя всех зданиями в стиле барокко. В георгианскую эпоху в нем воплотилась мечта об элегантности, в годы правления королевы Виктории он стал олицетворением Британской империи. В наши дни это крупный финансовый центр.',
+    name: 'London',
+    description:  'The capital of the United Kingdom and one of the greatest cities in history and modernity. In Westminster, the government operates, and it is also home to Buckingham Palace, the best national galleries, museums, theaters, and clubs. London is constantly changing: from a Roman, and then an early-medieval fortress, it transformed into a major city. After the Great Fire of London in 1666, it literally rose from the ashes, astonishing everyone with its Baroque-style buildings. During the Georgian era, it embodied the dream of elegance, and during Queen Victoria\'s reign, it became the embodiment of the British Empire. Today, it is a major financial center.',
     photos: Array.from({length: getRandomPositiveInteger(0, 5)}, () => `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`)
   },
   {
     id: '9adb05f5-5a7e-4df1-a47b-079853d44bb3',
-    name: 'Лиссабон',
-    description: 'Cтолица Португалии, отправная точка в маршрутах легендарных мореплавателей и один из старейших городов планеты, расположенный в устье реки Тежу, в 15 км от Атлантического океана. Главная отличительная черта Лиссабона – потрясающая гармоничность облика, которую нечасто встретишь в местах с таким выдающимся и без преувеличения славным прошлым. Оранжевые крыши жилых домов, берберийские орнаменты на стенах и современные здания бизнес-центров здесь не только не контрастируют с объектами готической, барочной и мануэлинской архитектуры, но и вносят приятное разнообразие в общую картину.',
+    name: 'Lissabon',
+    description: 'The capital of Portugal, the starting point for legendary sailors\' routes, and one of the oldest cities on the planet, situated at the mouth of the Tagus River, just 15 km from the Atlantic Ocean. Lisbon’s main distinguishing feature is its stunning harmony, which is rarely found in places with such outstanding and truly glorious pasts. The orange roofs of residential houses, Berber ornaments on walls, and modern business centers not only do not contrast with Gothic, Baroque, and Manueline architectural objects but also add pleasant variety to the overall picture.',
     photos: Array.from({length: getRandomPositiveInteger(0, 5)}, () => `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`)
   },
   {
     id: '9428ea55-9370-48c4-9ff8-8b13b593cd00',
-    name: 'Рейкьявик',
-    description: 'Cтолица и одна из общин Исландии, называемая также «туристическими воротами» страны. Несмотря на то, что город является самым крупным на острове, его можно обойти пешком меньше чем за день. Компактные размеры – всего 274,5 км² – не мешают Рейкьявику быть важным научным и экономическим центром. Только здесь вам представится возможность выучить один из древнейших языков мира, посетить ледяное кафе и отведать мороженое с рыбой.',
+    name: 'Reykjavik',
+    description: 'The capital and one of the municipalities of Iceland, also known as the "tourist gateway" of the country. Despite being the largest city on the island, it can be walked through in less than a day. Its compact size—just 274.5 square kilometers—doesn’t prevent Reykjavik from being an important scientific and economic hub. Only here will you have the opportunity to learn one of the world\'s oldest languages, visit an ice café, and taste ice cream with fish.',
     photos: Array.from({length: getRandomPositiveInteger(0, 5)}, () => `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`)
   },
   {
     id: '468d5bf7-33ee-45f1-b2ac-e5d374b63df1',
-    name: 'Хельсинки',
-    description: 'Cтолица Финляндии, политический, научный и культурный центр страны. Этот неповторимый, разнообразный, интригующий город способен удивить даже тех, кто хорошо его знает. Причин приехать в Хельсинки может быть огромное количество: насладиться тишиной и свежим воздухом в эпицентре городской жизни, полюбоваться архитектурой в стиле модерн, увидеть северное сияние, попариться в знаменитой финской сауне, – но результат непременно один – здешняя атмосфера навсегда поселяется в сердце.',
+    name: 'Helsinki',
+    description: 'The capital of Finland, political, scientific, and cultural center of the country. This unique, diverse, intriguing city is capable of surprising even those who know it well. There may be countless reasons to come to Helsinki: to enjoy the silence and fresh air in the epicenter of city life, admire Art Nouveau architecture, see the Northern Lights, relax in a famous Finnish sauna—the result is always the same: the local atmosphere settles forever in your heart.',
     photos: Array.from({length: getRandomPositiveInteger(0, 5)}, () => `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`)
   },
   {
     id: '5255dda8-f44d-45b6-8cb9-c8d7a73aeac4',
-    name: 'Тенерифе',
-    description: 'Cамый большой из Канарских островов, его площадь составляет 2045 км², а население — 700 тыс. человек. Туристов здесь ждут многочисленные достопримечательности, развлечения, интересные города. Остров делится на южное побережье с сухим климатом и золотистыми пляжами и более влажное и ветреное северное побережье, чьи черные пески под крутыми скалами напоминают о вулканическом происхождении Тенерифе. Между ними на высоту 3718 м вознесся самый высокий пик Испании — гора Тейде.',
+    name: 'Tenerife',
+    description: 'The largest of the Canary Islands, covering an area of 2,045 square kilometers, with a population of 700 thousand people. Tourists can find numerous attractions, entertainment, and interesting cities here. The island is divided between the southern coast with a dry climate and golden beaches, and the more humid and windy northern coast, whose black sands under steep cliffs remind us of Tenerife\'s volcanic origin. Between them rises the highest peak in Spain, Mount Teide, reaching a height of 3,718 meters.',
     photos: Array.from({length: getRandomPositiveInteger(0, 5)}, () => `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`)
   }
 ];

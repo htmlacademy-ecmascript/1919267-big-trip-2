@@ -46,7 +46,7 @@ const mockPoints = [
   {
     'id': '6d633166-6d3b-4e7d-9273-34b02554719d',
     'basePrice': getRandomPositiveInteger(Price.MIN, Price.MAX),
-    'dateFrom': '2024-07-18T05:55:05.048Z',
+    'dateFrom': '2024-07-08T05:55:05.048Z',
     'dateTo': '2024-07-20T15:38:05.048Z',
     'destination': '5255dda8-f44d-45b6-8cb9-c8d7a73aeac4',
     'isFavorite': Boolean(getRandomPositiveInteger(0, 1)),

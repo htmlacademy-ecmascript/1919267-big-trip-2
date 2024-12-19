@@ -11,12 +11,14 @@ const SECONDS_IN_MINUTES = 60;
 
 const HOURS_IN_DAY = 24;
 
-const DATE_FORMAT = {
-  fullDate: 'YYYY-MM-D',
-  monthDay: 'MMM D',
-  time: 'HH:mm'
+const DateFormat = {
+  FULL_DATE: 'fullDate',
+  MONTH_DAY: 'monthDay',
+  TIME: 'time'
 };
 
 const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-export {Price, POINTS_COUNT, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DATE_FORMAT, months};
+const pointTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+
+export {Price, POINTS_COUNT, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, months, pointTypes};

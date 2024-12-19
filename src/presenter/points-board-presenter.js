@@ -21,7 +21,8 @@ export default class PointsBoardPresenter {
       point: this.boardPoints[0],
       offers: this.pointsModel.getOffersByType(this.boardPoints[0].type),
       checkedOffers: [...this.pointsModel.getOffersById(this.boardPoints[0].type, this.boardPoints[0].offers)],
-      destination: this.pointsModel.getDestinationById(this.boardPoints[0].destination)
+      destination: this.pointsModel.getDestinationById(this.boardPoints[0].destination),
+      destinations: this.pointsModel.getDestinations()
     }), this.pointsListComponent.getElement(), RenderPosition.AFTERBEGIN);
 
     for (let i = 0; i < this.boardPoints.length; i++) {

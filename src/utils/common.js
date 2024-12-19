@@ -1,4 +1,4 @@
-import { months } from '../const.js';
+import { DateFormat, months } from '../const.js';
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -17,11 +17,6 @@ function addZero (data) {
 
 function humanizePointDueDate(dateString, format) {
   const date = new Date(dateString);
-  const DATE_FORMAT = {
-    fullDate: 'YYYY-MM-D',
-    monthDay: 'MMM D',
-    time: 'HH:mm'
-  };
 
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -30,14 +25,14 @@ function humanizePointDueDate(dateString, format) {
   const minutes = date.getMinutes();
 
   switch(format) {
-    case (DATE_FORMAT.fullDate):
-      return `${year}-${month}-${day}`;
-    case (DATE_FORMAT.monthDay):
+    case (DateFormat.FULL_DATE):
+      return `${addZero(day)}/${addZero(month)}/${year.toString().slice(-2)} ${addZero(hours)}:${addZero(minutes)}`;
+    case (DateFormat.MONTH_DAY):
       return `${months[month - 1]} ${day}`;
-    case (DATE_FORMAT.time):
+    case (DateFormat.TIME):
       return `${addZero(hours)}:${addZero(minutes)}`;
     default:
-      return `${year}-${month}-${day}`;
+      return `${year}-${addZero(month)}-${addZero(day)}`;
   }
 }
 
@@ -58,9 +53,18 @@ function getDuration (dateFrom, dateTo) {
   return message;
 }
 
+function capitalizeFirstLetter(word) {
+  if (word.length === 0) {
+    return word;
+  }
+
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
 export {
   getRandomArrayElement,
   getRandomPositiveInteger,
   humanizePointDueDate,
-  getDuration
+  getDuration,
+  capitalizeFirstLetter
 };
