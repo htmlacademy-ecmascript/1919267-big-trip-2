@@ -1,10 +1,53 @@
-import { DateFormat, pointTypes } from '../const.js';
+import { DateFormat } from '../const.js';
+import { mockOffers } from '../mock/offers.js';
 import { createElement } from '../render.js';
 import { capitalizeFirstLetter, humanizePointDueDate } from '../utils/common.js';
+
+function createTypeTemplate (type, pointType) {
+  const isChecked = pointType === type;
+
+  return `<div class="event__type-item">
+    <input id="event-type-${pointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${pointType} checked=${isChecked}>
+    <label class="event__type-label  event__type-label--${pointType}" for="event-type-${pointType}-1">${capitalizeFirstLetter(pointType)}</label>
+  </div>`;
+}
+
+function createDestinationTemplate (destination) {
+  return `<option value=${destination.name}></option>`;
+}
+
+function createOfferTemplate (offer, checkedOffers) {
+  const {id, title, price} = offer;
+  const isCheckedOffer = checkedOffers.map((item) => item.id).includes(id) ? 'checked' : '';
+
+  return `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-${id}" ${isCheckedOffer}>
+    <label class="event__offer-label" for="event-offer-${id}-1">
+      <span class="event__offer-title">${title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${price}</span>
+    </label>
+  </div>`;
+}
+
+function createOffersListTemplate (offers, checkedOffers) {
+  if (offers.length !== 0) {
+    return `<section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+    <div class="event__available-offers">
+    ${offers.map((offer) => createOfferTemplate(offer, checkedOffers)).join('')}
+    </div>
+  </section>`;
+  }
+
+  return '';
+}
 
 function createPointEditTemplate(point, offers, checkedOffers, destination, destinations) {
   const {id, type, dateFrom, dateTo, basePrice} = point;
   const {name, description} = destination;
+  const pointTypes = mockOffers.map((offer) => offer.type);
 
   return (
     `<li class="trip-events__item">
@@ -20,7 +63,7 @@ function createPointEditTemplate(point, offers, checkedOffers, destination, dest
                     <div class="event__type-list">
                       <fieldset class="event__type-group">
                         <legend class="visually-hidden">Event type</legend>
-                        ${pointTypes.map((pointType) => createTypeTemplate(pointType)).join('')}
+                        ${pointTypes.map((pointType) => createTypeTemplate(type, pointType)).join('')}
                       </fieldset>
                     </div>
                   </div>
@@ -58,14 +101,7 @@ function createPointEditTemplate(point, offers, checkedOffers, destination, dest
                   </button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
-                    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-                    <div class="event__available-offers">
-                    ${offers.map((offer) => createOfferTemplate(offer, checkedOffers)).join('')}
-                    </div>
-                  </section>
-
+                  ${createOffersListTemplate(offers, checkedOffers)}
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     <p class="event__destination-description">${description}</p>
@@ -74,31 +110,6 @@ function createPointEditTemplate(point, offers, checkedOffers, destination, dest
               </form>
             </li>`
   );
-}
-
-function createTypeTemplate (type) {
-  return `<div class="event__type-item">
-    <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${type}>
-    <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${capitalizeFirstLetter(type)}</label>
-  </div>`;
-}
-
-function createDestinationTemplate (destination) {
-  return `<option value=${destination.name}></option>`;
-}
-
-function createOfferTemplate (offer, checkedOffers) {
-  const {id, title, price} = offer;
-  const isCheckedOffer = checkedOffers.map((item) => item.id).includes(id) ? 'checked' : '';
-
-  return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-${id}" ${isCheckedOffer}>
-    <label class="event__offer-label" for="event-offer-${id}-1">
-      <span class="event__offer-title">${title}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${price}</span>
-    </label>
-  </div>`;
 }
 
 export default class PointEditView {

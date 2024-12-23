@@ -1,4 +1,4 @@
-import { DateFormat, months } from '../const.js';
+import { DateFormat, MONTHS } from '../const.js';
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -28,7 +28,7 @@ function humanizePointDueDate(dateString, format) {
     case (DateFormat.FULL_DATE):
       return `${addZero(day)}/${addZero(month)}/${year.toString().slice(-2)} ${addZero(hours)}:${addZero(minutes)}`;
     case (DateFormat.MONTH_DAY):
-      return `${months[month - 1]} ${day}`;
+      return `${MONTHS[month - 1]} ${day}`;
     case (DateFormat.TIME):
       return `${addZero(hours)}:${addZero(minutes)}`;
     default:

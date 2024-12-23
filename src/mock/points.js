@@ -51,7 +51,7 @@ const mockPoints = [
     'destination': '5255dda8-f44d-45b6-8cb9-c8d7a73aeac4',
     'isFavorite': Boolean(getRandomPositiveInteger(0, 1)),
     'offers': [],
-    'type': 'ship',
+    'type': 'sightseeing',
   }
 ];
 
