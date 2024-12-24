@@ -4,10 +4,8 @@ import { createElement } from '../render.js';
 import { capitalizeFirstLetter, humanizePointDueDate } from '../utils/common.js';
 
 function createTypeTemplate (type, pointType) {
-  const isChecked = pointType === type;
-
   return `<div class="event__type-item">
-    <input id="event-type-${pointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${pointType} checked=${isChecked}>
+    <input id="event-type-${pointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${pointType} ${pointType === type ? 'checked' : ''}>
     <label class="event__type-label  event__type-label--${pointType}" for="event-type-${pointType}-1">${capitalizeFirstLetter(pointType)}</label>
   </div>`;
 }
