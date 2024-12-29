@@ -1,5 +1,5 @@
 import { DateFormat } from '../const.js';
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { getDuration, humanizePointDueDate } from '../utils/common.js';
 
 function createOfferTemplate (offer) {
@@ -53,25 +53,19 @@ function createPointItemTemplate(point, offers, destination) {
   );
 }
 
-export default class PointItemView {
+export default class PointItemView extends AbstractView {
+  #point = null;
+  #offers = [];
+  #destination = null;
+
   constructor ({point, offers, destination}) {
-    this.point = point;
-    this.offers = offers;
-    this.destination = destination;
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destination = destination;
   }
 
-  getTemplate() {
-    return createPointItemTemplate(this.point, this.offers, this.destination);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createPointItemTemplate(this.#point, this.#offers, this.#destination);
   }
 }

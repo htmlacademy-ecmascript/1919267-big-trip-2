@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createPointsBoardTemplate() {
   return `<section class="trip-events">
@@ -6,19 +6,8 @@ function createPointsBoardTemplate() {
         </section>`;
 }
 
-export default class PointsBoardView {
-  getTemplate() {
+export default class PointsBoardView extends AbstractView {
+  get template() {
     return createPointsBoardTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

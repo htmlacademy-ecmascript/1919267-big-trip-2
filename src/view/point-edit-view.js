@@ -1,6 +1,6 @@
 import { DateFormat } from '../const.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { mockOffers } from '../mock/offers.js';
-import { createElement } from '../render.js';
 import { capitalizeFirstLetter, humanizePointDueDate } from '../utils/common.js';
 
 function createTypeTemplate (type, pointType) {
@@ -110,27 +110,23 @@ function createPointEditTemplate(point, offers, checkedOffers, destination, dest
   );
 }
 
-export default class PointEditView {
+export default class PointEditView extends AbstractView {
+  #point = null;
+  #offers = [];
+  #checkedOffers = [];
+  #destination = null;
+  #destinations = [];
+
   constructor ({point, offers, checkedOffers, destination, destinations}) {
-    this.point = point;
-    this.offers = offers;
-    this.checkedOffers = checkedOffers;
-    this.destination = destination;
-    this.destinations = destinations;
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#checkedOffers = checkedOffers;
+    this.#destination = destination;
+    this.#destinations = destinations;
   }
 
-  getTemplate () {
-    return createPointEditTemplate(this.point, this.offers, this.checkedOffers, this.destination, this.destinations);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template () {
+    return createPointEditTemplate(this.#point, this.#offers, this.#checkedOffers, this.#destination, this.#destinations);
   }
 }

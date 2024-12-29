@@ -1,4 +1,4 @@
-import { render, RenderPosition } from '../render.js';
+import { render } from '../framework/render.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointItemView from '../view/point-item-view.js';
 import PointsListView from '../view/points-list-view.js';
@@ -23,14 +23,14 @@ export default class PointsBoardPresenter {
       checkedOffers: [...this.pointsModel.getOffersById(this.boardPoints[0].type, this.boardPoints[0].offers)],
       destination: this.pointsModel.getDestinationById(this.boardPoints[0].destination),
       destinations: this.pointsModel.getDestinations()
-    }), this.pointsListComponent.getElement(), RenderPosition.AFTERBEGIN);
+    }), this.pointsListComponent.element);
 
     for (let i = 0; i < this.boardPoints.length; i++) {
       render(new PointItemView({
         point: this.boardPoints[i],
         offers: [...this.pointsModel.getOffersById(this.boardPoints[i].type, this.boardPoints[i].offers)],
         destination: this.pointsModel.getDestinationById(this.boardPoints[i].destination)
-      }), this.pointsListComponent.getElement());
+      }), this.pointsListComponent.element);
     }
   }
 }
