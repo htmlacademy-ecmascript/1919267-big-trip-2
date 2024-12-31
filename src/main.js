@@ -1,6 +1,6 @@
+import { render } from './framework/render.js';
 import PointsModel from './model/points-model.js';
 import PointsBoardPresenter from './presenter/points-board-presenter.js';
-import { render, RenderPosition } from './render';
 import AddEventButtonView from './view/add-event-button-view.js';
 import FiltersFormView from './view/filters-form-view.js';
 import TripInfoView from './view/trip-info-view.js';
@@ -15,7 +15,7 @@ const pointsBoardPresenter = new PointsBoardPresenter({
   pointsModel
 });
 
-render(new TripInfoView(), tripMainContainer, RenderPosition.AFTERBEGIN);
+render(new TripInfoView(), tripMainContainer);
 render(new FiltersFormView(), filtersContainer);
 render(new AddEventButtonView(), tripMainContainer);
 pointsBoardPresenter.init();
