@@ -1,7 +1,8 @@
 import { DateFormat } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { mockOffers } from '../mock/offers.js';
-import { capitalizeFirstLetter, humanizePointDueDate } from '../utils/common.js';
+import { capitalizeFirstLetter } from '../utils/common.js';
+import { humanizePointDueDate } from '../utils/date.js';
 
 function createTypeTemplate (type, pointType) {
   return `<div class="event__type-item">

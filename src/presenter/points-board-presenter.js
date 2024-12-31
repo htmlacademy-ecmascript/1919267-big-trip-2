@@ -1,6 +1,8 @@
 import { render, replace } from '../framework/render.js';
+import NoPointsView from '../view/no-points-view.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointItemView from '../view/point-item-view.js';
+import PointsBoardView from '../view/points-board-view.js';
 import PointsListView from '../view/points-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 
@@ -11,6 +13,7 @@ export default class PointsBoardPresenter {
 
   #tripSortComponent = new TripSortView();
   #pointsListComponent = new PointsListView();
+  #pointsBoardComponent = new PointsBoardView();
 
   constructor({pointsBoardContainer, pointsModel}) {
     this.#pointsBoardContainer = pointsBoardContainer;
@@ -64,8 +67,14 @@ export default class PointsBoardPresenter {
   }
 
   #renderBoard () {
-    render(this.#tripSortComponent, this.#pointsBoardContainer);
-    render(this.#pointsListComponent, this.#pointsBoardContainer);
+    render(this.#pointsBoardComponent, this.#pointsBoardContainer);
+
+    if (this.#boardPoints.length === 0) {
+      render(new NoPointsView(), this.#pointsBoardComponent.element);
+    } else {
+      render(this.#tripSortComponent, this.#pointsBoardComponent.element);
+      render(this.#pointsListComponent, this.#pointsBoardComponent.element);
+    }
 
     for (let i = 0; i < this.#boardPoints.length; i++) {
       this.#renderPoint(this.#boardPoints[i]);
