@@ -46,9 +46,9 @@ export default class PointsBoardPresenter {
 
     const pointEditComponent = new PointEditView({
       point,
-      offers: [...this.#pointsModel.getOffersById(point.type, point.offers)],
-      checkedOffers: [...this.#pointsModel.getOffersById(this.#boardPoints[0].type, this.#boardPoints[0].offers)],
-      destination: this.#pointsModel.getDestinationById(this.#boardPoints[0].destination),
+      offers: this.#pointsModel.getOffersByType(point.type),
+      checkedOffers: [...this.#pointsModel.getOffersById(point.type, point.offers)],
+      destination: this.#pointsModel.getDestinationById(point.destination),
       destinations: this.#pointsModel.destinations,
       onFormSubmit: () => {
         replaceFormToCard();
