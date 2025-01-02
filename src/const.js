@@ -19,4 +19,11 @@ const DateFormat = {
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-export {Price, POINTS_COUNT, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS};
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
+
+export {Price, POINTS_COUNT, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS, FilterType};
