@@ -1,4 +1,4 @@
-import { render, replace } from '../framework/render.js';
+import { remove, render, replace } from '../framework/render.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointItemView from '../view/point-item-view.js';
 
@@ -17,23 +17,45 @@ export default class PointPresenter {
   init (point) {
     this.#point = point;
 
+    const prevPointComponent = this.#pointComponent;
+    const prevPointEditComponent = this.#pointEditComponent;
+
     this.#pointComponent = new PointItemView({
-      point,
-      offers: [...this.#pointsModel.getOffersById(point.type, point.offers)],
-      destination: this.#pointsModel.getDestinationById(point.destination),
+      point: this.#point,
+      offers: [...this.#pointsModel.getOffersById(this.#point.type, this.#point.offers)],
+      destination: this.#pointsModel.getDestinationById(this.#point.destination),
       onEditClick: this.#handleEditClick
     });
 
     this.#pointEditComponent = new PointEditView({
-      point,
-      offers: this.#pointsModel.getOffersByType(point.type),
-      checkedOffers: [...this.#pointsModel.getOffersById(point.type, point.offers)],
-      destination: this.#pointsModel.getDestinationById(point.destination),
+      point: this.#point,
+      offers: this.#pointsModel.getOffersByType(this.#point.type),
+      checkedOffers: [...this.#pointsModel.getOffersById(this.#point.type, this.#point.offers)],
+      destination: this.#pointsModel.getDestinationById(this.#point.destination),
       destinations: this.#pointsModel.destinations,
       onFormSubmit: this.#handleFormSubmit
     });
 
-    render(this.#pointComponent, this.#pointsListContainer);
+    if (prevPointComponent === null || prevPointEditComponent === null) {
+      render(this.#pointComponent, this.#pointsListContainer);
+      return;
+    }
+
+    if (this.#pointsListContainer.contains(prevPointComponent.element)) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if (this.#pointsListContainer.contains(prevPointEditComponent.element)) {
+      replace(this.#pointEditComponent, prevPointEditComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevPointEditComponent);
+  }
+
+  destroy () {
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
   }
 
   #replaceCardToForm() {

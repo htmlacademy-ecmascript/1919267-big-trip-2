@@ -9,6 +9,7 @@ export default class PointsBoardPresenter {
   #pointsBoardContainer = null;
   #pointsModel = null;
   #boardPoints = [];
+  #pointsPresenters = new Map();
 
   #tripSortComponent = new TripSortView();
   #pointsListComponent = new PointsListView();
@@ -32,6 +33,7 @@ export default class PointsBoardPresenter {
     });
 
     pointPresenter.init(point);
+    this.#pointsPresenters.set(point.id, pointPresenter);
   }
 
   #renderBoard () {
@@ -43,7 +45,6 @@ export default class PointsBoardPresenter {
     }
     this.#renderSort();
     this.#renderPointsList();
-
   }
 
   #renderSort () {
@@ -57,6 +58,11 @@ export default class PointsBoardPresenter {
   #renderPointsList () {
     render(this.#pointsListComponent, this.#pointsBoardComponent.element);
     this.#renderPoints();
+  }
+
+  #clearPointsList () {
+    this.#pointsPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointsPresenters.clear();
   }
 
   #renderPoints () {
