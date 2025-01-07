@@ -1,5 +1,5 @@
 import { Price } from '../const.js';
-import {getRandomArrayElement, getRandomPositiveInteger} from '../utils/common.js';
+import {getRandomPositiveInteger} from '../utils/common.js';
 
 const mockPoints = [
   {
@@ -69,8 +69,8 @@ const mockPoints = [
   }
 ];
 
-function getRandomMockPoint () {
-  return getRandomArrayElement(mockPoints);
+function getMockPoints () {
+  return mockPoints;
 }
 
-export {getRandomMockPoint};
+export {getMockPoints};

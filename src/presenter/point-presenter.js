@@ -1,3 +1,4 @@
+import { Mode } from '../const.js';
 import { remove, render, replace } from '../framework/render.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointItemView from '../view/point-item-view.js';
@@ -9,11 +10,14 @@ export default class PointPresenter {
   #pointsModel = null;
   #point = null;
   #handleDataChange = null;
+  #mode = Mode.DEFAULT;
+  #handleModeChange = null;
 
-  constructor ({pointsListContainer, pointsModel, onDataChange}) {
+  constructor ({pointsListContainer, pointsModel, onDataChange, onModeChange}) {
     this.#pointsListContainer = pointsListContainer;
     this.#pointsModel = pointsModel;
     this.#handleDataChange = onDataChange;
+    this.#handleModeChange = onModeChange;
   }
 
   init (point) {
@@ -44,16 +48,22 @@ export default class PointPresenter {
       return;
     }
 
-    if (this.#pointsListContainer.contains(prevPointComponent.element)) {
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#pointsListContainer.contains(prevPointEditComponent.element)) {
+    if (this.#mode === Mode.EDIT) {
       replace(this.#pointEditComponent, prevPointEditComponent);
     }
 
     remove(prevPointComponent);
     remove(prevPointEditComponent);
+  }
+
+  resetView() {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceFormToCard();
+    }
   }
 
   destroy () {
@@ -64,19 +74,22 @@ export default class PointPresenter {
   #replaceCardToForm() {
     replace(this.#pointEditComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#escKeyDownHandler);
+    this.#handleModeChange();
+    this.#mode = Mode.EDIT;
   }
 
   #replaceFormToCard() {
     replace(this.#pointComponent, this.#pointEditComponent);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
+    this.#mode = Mode.DEFAULT;
   }
 
-  #escKeyDownHandler (evt) {
+  #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
       this.#replaceFormToCard();
     }
-  }
+  };
 
   #handleEditClick = () => {
     this.#replaceCardToForm();
