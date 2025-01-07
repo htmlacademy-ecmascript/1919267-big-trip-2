@@ -8,10 +8,12 @@ export default class PointPresenter {
   #pointEditComponent = null;
   #pointsModel = null;
   #point = null;
+  #handleDataChange = null;
 
-  constructor ({pointsListContainer, pointsModel}) {
+  constructor ({pointsListContainer, pointsModel, onDataChange}) {
     this.#pointsListContainer = pointsListContainer;
     this.#pointsModel = pointsModel;
+    this.#handleDataChange = onDataChange;
   }
 
   init (point) {
@@ -24,7 +26,8 @@ export default class PointPresenter {
       point: this.#point,
       offers: [...this.#pointsModel.getOffersById(this.#point.type, this.#point.offers)],
       destination: this.#pointsModel.getDestinationById(this.#point.destination),
-      onEditClick: this.#handleEditClick
+      onEditClick: this.#handleEditClick,
+      onFavoriteClick: this.#handleFavouriteClick,
     });
 
     this.#pointEditComponent = new PointEditView({
@@ -81,5 +84,9 @@ export default class PointPresenter {
 
   #handleFormSubmit = () => {
     this.#replaceFormToCard();
+  };
+
+  #handleFavouriteClick = () => {
+    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };
 }

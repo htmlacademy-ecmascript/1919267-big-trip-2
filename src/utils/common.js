@@ -17,8 +17,13 @@ function capitalizeFirstLetter(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+function updateItem (items, updatedItem) {
+  return items.map((item) => item.id === updatedItem.id ? updatedItem : item);
+}
+
 export {
   getRandomArrayElement,
   getRandomPositiveInteger,
-  capitalizeFirstLetter
+  capitalizeFirstLetter,
+  updateItem
 };

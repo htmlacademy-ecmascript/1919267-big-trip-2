@@ -1,4 +1,5 @@
 import { render, RenderPosition } from '../framework/render.js';
+import { updateItem } from '../utils/common.js';
 import NoPointsView from '../view/no-points-view.js';
 import PointsBoardView from '../view/points-board-view.js';
 import PointsListView from '../view/points-list-view.js';
@@ -30,6 +31,7 @@ export default class PointsBoardPresenter {
     const pointPresenter = new PointPresenter({
       pointsListContainer: this.#pointsListComponent.element,
       pointsModel: this.#pointsModel,
+      onDataChange: this.#handleDataChange
     });
 
     pointPresenter.init(point);
@@ -68,4 +70,9 @@ export default class PointsBoardPresenter {
   #renderPoints () {
     this.#boardPoints.forEach((item) => this.#renderPoint(item));
   }
+
+  #handleDataChange = (updatedPoint) => {
+    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.#pointsPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
 }
