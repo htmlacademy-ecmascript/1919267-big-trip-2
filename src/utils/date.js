@@ -20,6 +20,10 @@ function humanizePointDueDate(dateString, format) {
       return `${MONTHS[month - 1]} ${day}`;
     case (DateFormat.TIME):
       return `${addZero(hours)}:${addZero(minutes)}`;
+    case (DateFormat.TRIP_INFO_SHORT):
+      return `${addZero(day)}`;
+    case (DateFormat.TRIP_INFO):
+      return `${addZero(day)} ${MONTHS[month - 1]}`;
     default:
       return `${year}-${addZero(month)}-${addZero(day)}`;
   }

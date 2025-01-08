@@ -12,7 +12,9 @@ const HOURS_IN_DAY = 24;
 const DateFormat = {
   FULL_DATE: 'fullDate',
   MONTH_DAY: 'monthDay',
-  TIME: 'time'
+  TIME: 'time',
+  TRIP_INFO_SHORT: 'tripInfoShort',
+  TRIP_INFO: 'tripInfo'
 };
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
