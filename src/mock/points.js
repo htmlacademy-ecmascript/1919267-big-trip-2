@@ -1,5 +1,5 @@
 import { Price } from '../const.js';
-import {getRandomArrayElement, getRandomPositiveInteger} from '../utils/common.js';
+import {getRandomPositiveInteger} from '../utils/common.js';
 
 const mockPoints = [
   {
@@ -52,11 +52,25 @@ const mockPoints = [
     'isFavorite': Boolean(getRandomPositiveInteger(0, 1)),
     'offers': [],
     'type': 'sightseeing',
+  },
+  {
+    'id': '6d633166-6d3b-4e7d-9288-55b02554719d',
+    'basePrice': getRandomPositiveInteger(Price.MIN, Price.MAX),
+    'dateFrom': '2025-02-11T05:55:05.048Z',
+    'dateTo': '2025-02-28T15:38:05.048Z',
+    'destination': '468d5bf7-33ee-45f1-b2ac-e5d374b63df1',
+    'isFavorite': Boolean(getRandomPositiveInteger(0, 1)),
+    'offers': [
+      '47efc2a2-475a-446c-87bb-40775187f180',
+      '1cd5da85-d187-4433-b4d1-b1cf0f16ce39',
+      '9e08734a-328f-4d12-84cd-567dd7c77e8a'
+    ],
+    'type': 'ship',
   }
 ];
 
-function getRandomMockPoint () {
-  return getRandomArrayElement(mockPoints);
+function getMockPoints () {
+  return mockPoints;
 }
 
-export {getRandomMockPoint};
+export {getMockPoints};

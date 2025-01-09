@@ -18,7 +18,7 @@ const pointsBoardPresenter = new PointsBoardPresenter({
   pointsModel
 });
 
-render(new TripInfoView(), tripMainContainer, RenderPosition.AFTERBEGIN);
+render(new TripInfoView(pointsModel), tripMainContainer, RenderPosition.AFTERBEGIN);
 render(new FiltersFormView({filters, currentFilter}), filtersContainer);
 render(new AddEventButtonView(), tripMainContainer);
 pointsBoardPresenter.init();

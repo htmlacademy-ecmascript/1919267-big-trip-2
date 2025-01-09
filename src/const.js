@@ -3,8 +3,6 @@ const Price = {
   MAX: 10000,
 };
 
-const POINTS_COUNT = 4;
-
 const MILLISECONDS_IN_MINUTES = 60000;
 
 const SECONDS_IN_MINUTES = 60;
@@ -14,7 +12,9 @@ const HOURS_IN_DAY = 24;
 const DateFormat = {
   FULL_DATE: 'fullDate',
   MONTH_DAY: 'monthDay',
-  TIME: 'time'
+  TIME: 'time',
+  TRIP_INFO_SHORT: 'tripInfoShort',
+  TRIP_INFO: 'tripInfo'
 };
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -26,4 +26,9 @@ const FilterType = {
   PAST: 'past',
 };
 
-export {Price, POINTS_COUNT, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS, FilterType};
+const Mode = {
+  DEFAULT: 'default',
+  EDIT: 'edit'
+};
+
+export {Price, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS, FilterType, Mode};

@@ -1,19 +1,21 @@
-import { render, replace } from '../framework/render.js';
+import { render, RenderPosition } from '../framework/render.js';
+import { updateItem } from '../utils/common.js';
 import NoPointsView from '../view/no-points-view.js';
-import PointEditView from '../view/point-edit-view.js';
-import PointItemView from '../view/point-item-view.js';
 import PointsBoardView from '../view/points-board-view.js';
 import PointsListView from '../view/points-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
+import PointPresenter from './point-presenter.js';
 
 export default class PointsBoardPresenter {
   #pointsBoardContainer = null;
   #pointsModel = null;
   #boardPoints = [];
+  #pointsPresenters = new Map();
 
   #tripSortComponent = new TripSortView();
   #pointsListComponent = new PointsListView();
   #pointsBoardComponent = new PointsBoardView();
+  #noPointsComponent = new NoPointsView();
 
   constructor({pointsBoardContainer, pointsModel}) {
     this.#pointsBoardContainer = pointsBoardContainer;
@@ -26,58 +28,56 @@ export default class PointsBoardPresenter {
   }
 
   #renderPoint (point) {
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-
-    const pointComponent = new PointItemView({
-      point,
-      offers: [...this.#pointsModel.getOffersById(point.type, point.offers)],
-      destination: this.#pointsModel.getDestinationById(point.destination),
-      onEditClick: () => {
-        replaceCardToForm();
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
+    const pointPresenter = new PointPresenter({
+      pointsListContainer: this.#pointsListComponent.element,
+      pointsModel: this.#pointsModel,
+      onDataChange: this.#handleDataChange,
+      onModeChange:this.#handleModeChange,
     });
 
-    const pointEditComponent = new PointEditView({
-      point,
-      offers: [...this.#pointsModel.getOffersById(point.type, point.offers)],
-      checkedOffers: [...this.#pointsModel.getOffersById(this.#boardPoints[0].type, this.#boardPoints[0].offers)],
-      destination: this.#pointsModel.getDestinationById(this.#boardPoints[0].destination),
-      destinations: this.#pointsModel.destinations,
-      onFormSubmit: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    });
-
-    function replaceCardToForm() {
-      replace(pointEditComponent, pointComponent);
-    }
-    function replaceFormToCard() {
-      replace(pointComponent, pointEditComponent);
-    }
-
-    render(pointComponent, this.#pointsListComponent.element);
+    pointPresenter.init(point);
+    this.#pointsPresenters.set(point.id, pointPresenter);
   }
 
   #renderBoard () {
     render(this.#pointsBoardComponent, this.#pointsBoardContainer);
 
     if (this.#boardPoints.length === 0) {
-      render(new NoPointsView(), this.#pointsBoardComponent.element);
-    } else {
-      render(this.#tripSortComponent, this.#pointsBoardComponent.element);
-      render(this.#pointsListComponent, this.#pointsBoardComponent.element);
+      this.#renderNoPoints();
+      return;
     }
-
-    for (let i = 0; i < this.#boardPoints.length; i++) {
-      this.#renderPoint(this.#boardPoints[i]);
-    }
+    this.#renderSort();
+    this.#renderPointsList();
   }
+
+  #renderSort () {
+    render(this.#tripSortComponent, this.#pointsBoardComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderNoPoints () {
+    render(this.#noPointsComponent, this.#pointsBoardComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderPointsList () {
+    render(this.#pointsListComponent, this.#pointsBoardComponent.element);
+    this.#renderPoints();
+  }
+
+  #clearPointsList () {
+    this.#pointsPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointsPresenters.clear();
+  }
+
+  #renderPoints () {
+    this.#boardPoints.forEach((item) => this.#renderPoint(item));
+  }
+
+  #handleDataChange = (updatedPoint) => {
+    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.#pointsPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #handleModeChange = () => {
+    this.#pointsPresenters.forEach((presenter) => presenter.resetView());
+  };
 }
