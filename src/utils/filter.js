@@ -1,16 +1,16 @@
 import { FilterType } from '../const.js';
+import dayjs from 'dayjs';
 
 function isPointFuture(point) {
-  return new Date(point.dateFrom) > new Date();
+  return dayjs().isBefore(point.dateFrom);
 }
 
 function isPointPresent(point) {
-  const currentDate = new Date();
-  return (new Date(point.dateFrom) <= currentDate) && (new Date(point.dateTo) >= currentDate);
+  return dayjs().isBefore(point.dateFrom) && dayjs().isAfter(point.dateTo);
 }
 
 function isPointPast(point) {
-  return new Date(point.dateTo) < new Date();
+  return dayjs().isAfter(point.dateTo);
 }
 
 const filter = {

@@ -1,5 +1,5 @@
 import { DateFormat } from '../const.js';
-import { humanizePointDueDate } from '../utils/date.js';
+import { formatDate } from '../utils/date.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 function getTripDate (points) {
@@ -7,7 +7,7 @@ function getTripDate (points) {
   const lastMonth = new Date(points[points.length - 1].dateFrom).getMonth();
   const dateFormat = firstMonth === lastMonth ? DateFormat.TRIP_INFO_SHORT : DateFormat.TRIP_INFO;
 
-  return `${humanizePointDueDate(points[0].dateFrom, dateFormat)}&nbsp;&mdash;&nbsp;${humanizePointDueDate(points[points.length - 1].dateTo, DateFormat.TRIP_INFO)}`;
+  return `${formatDate(points[0].dateFrom, dateFormat)}&nbsp;&mdash;&nbsp;${formatDate(points[points.length - 1].dateTo, DateFormat.TRIP_INFO)}`;
 }
 
 function getTripTitle (destinations) {

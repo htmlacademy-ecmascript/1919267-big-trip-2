@@ -1,52 +1,52 @@
-import { DateFormat, MONTHS } from '../const.js';
+import dayjs from 'dayjs';
+import minMax from 'dayjs/plugin/minMax';
+import durationPlugin from 'dayjs/plugin/duration';
 
-function addZero (data) {
-  return data < 10 ? `0${data}` : data;
+dayjs.extend(minMax);
+dayjs.extend(durationPlugin);
+
+const MSEC_IN_SEC = 1000;
+const SEC_IN_MIN = 60;
+const MIN_IN_HOUR = 60;
+const HOUR_IN_DAY = 24;
+
+const MSEC_IN_HOUR = MSEC_IN_SEC * SEC_IN_MIN * MIN_IN_HOUR;
+const MSEC_IN_DAY = MSEC_IN_HOUR * HOUR_IN_DAY;
+
+/**
+ * Функция, возвращающая отформатированную дату
+ * @param {dayjs.ConfigType} date
+ * @param {string} dateFormat
+ * @returns {string}
+ */
+
+function formatDate(date, dateFormat) {
+  return date ? dayjs(date).format(dateFormat) : '';
 }
 
-function humanizePointDueDate(dateString, format) {
-  const date = new Date(dateString);
+/**
+ * Функция, возвращающая длительность события
+ * @param {dayjs.ConfigType} dateFrom
+ * @param {dayjs.ConfigType} dateTo
+ * @returns {string}
+ */
 
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hours = date.getUTCHours();
-  const minutes = date.getMinutes();
+function getDuration(dateFrom, dateTo){
+  const diff = dayjs(dateTo).diff(dayjs(dateFrom));
 
-  switch(format) {
-    case (DateFormat.FULL_DATE):
-      return `${addZero(day)}/${addZero(month)}/${year.toString().slice(-2)} ${addZero(hours)}:${addZero(minutes)}`;
-    case (DateFormat.MONTH_DAY):
-      return `${MONTHS[month - 1]} ${day}`;
-    case (DateFormat.TIME):
-      return `${addZero(hours)}:${addZero(minutes)}`;
-    case (DateFormat.TRIP_INFO_SHORT):
-      return `${addZero(day)}`;
-    case (DateFormat.TRIP_INFO):
-      return `${addZero(day)} ${MONTHS[month - 1]}`;
-    default:
-      return `${year}-${addZero(month)}-${addZero(day)}`;
+  if (diff >= MSEC_IN_DAY) {
+    return dayjs.duration(diff).format('DD[D] HH[H] mm[M]');
+  }
+  if (diff >= MSEC_IN_HOUR) {
+    return dayjs.duration(diff).format('HH[H] mm[M]');
+  }
+  if (diff < MSEC_IN_HOUR) {
+    return dayjs.duration(diff).format('mm[M]');
   }
 }
 
-function getDuration (dateFrom, dateTo) {
-  const startDate = new Date(dateFrom);
-  const endDate = new Date(dateTo);
-  const difference = endDate - startDate;
-
-  const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-
-  let message = '';
-  message += (days > 0) ? `${days}D ` : '';
-  message += (hours > 0) ? `${hours}H ` : '';
-  message += (minutes > 0) ? `${minutes}M` : '';
-
-  return message;
-}
 
 export {
-  humanizePointDueDate,
+  formatDate,
   getDuration,
 };
