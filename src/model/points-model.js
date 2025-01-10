@@ -36,4 +36,8 @@ export default class PointsModel {
   get currentFilter () {
     return this.#currentFilter;
   }
+
+  set currentFilter (updatedFilter) {
+    this.#currentFilter = updatedFilter;
+  }
 }
