@@ -31,4 +31,22 @@ const Mode = {
   EDIT: 'edit'
 };
 
-export {Price, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS, FilterType, Mode};
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers'
+};
+
+const availableSortType = {
+  [SortType.DAY]: true,
+  [SortType.EVENT]: false,
+  [SortType.TIME]: true,
+  [SortType.PRICE]: true,
+  [SortType.OFFERS]: false
+};
+
+const DEFAULT_SORT_TYPE = SortType.DAY;
+
+export {Price, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS, FilterType, Mode, SortType, availableSortType, DEFAULT_SORT_TYPE};
