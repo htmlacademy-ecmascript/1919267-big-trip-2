@@ -7,7 +7,16 @@ function createFilterItemTemplate (filter, currentFilter) {
   const isDisabled = count === 0 ? 'disabled' : '';
 
   return `<div class="trip-filters__filter">
-        <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value=${type} ${isDisabled} ${isChecked}>
+        <input
+          id="filter-${type}"
+          class="trip-filters__filter-input  visually-hidden"
+          type="radio"
+          name="trip-filter"
+          value=${type}
+          data-filter-type="${type}"
+          ${isDisabled}
+          ${isChecked}
+        >
         <label class="trip-filters__filter-label" for="filter-${type}">${capitalizeFirstLetter(type)}</label>
       </div>`;
 }
@@ -22,14 +31,26 @@ function createFiltersFormTemplate(filterItems, currentFilter) {
 export default class FiltersFormView extends AbstractView {
   #filters = null;
   #currentFilter = null;
+  #handleFilterTypeChange = null;
 
-  constructor ({filters, currentFilter}) {
+  constructor ({filters, currentFilter, onFilterTypeChange}) {
     super();
     this.#filters = filters;
     this.#currentFilter = currentFilter;
+    this.#handleFilterTypeChange = onFilterTypeChange;
+
+    this.element.addEventListener('click', this.#filterTypeChangeHandler);
   }
 
   get template() {
     return createFiltersFormTemplate(this.#filters, this.#currentFilter);
   }
+
+  #filterTypeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'INPUT') {
+      return;
+    }
+
+    this.#handleFilterTypeChange(evt.target.dataset.filterType);
+  };
 }
