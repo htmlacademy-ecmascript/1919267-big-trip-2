@@ -40,9 +40,7 @@ function getDuration(dateFrom, dateTo){
   if (diff >= MSEC_IN_HOUR) {
     return dayjs.duration(diff).format('HH[H] mm[M]');
   }
-  if (diff < MSEC_IN_HOUR) {
-    return dayjs.duration(diff).format('mm[M]');
-  }
+  return dayjs.duration(diff).format('mm[M]');
 }
 
 

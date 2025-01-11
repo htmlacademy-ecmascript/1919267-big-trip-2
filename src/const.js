@@ -39,7 +39,7 @@ const SortType = {
   OFFERS: 'offers'
 };
 
-const availableSortType = {
+const AvailableSortType = {
   [SortType.DAY]: true,
   [SortType.EVENT]: false,
   [SortType.TIME]: true,
@@ -49,4 +49,4 @@ const availableSortType = {
 
 const DEFAULT_SORT_TYPE = SortType.DAY;
 
-export {Price, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS, FilterType, Mode, SortType, availableSortType, DEFAULT_SORT_TYPE};
+export {Price, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS, FilterType, Mode, SortType, AvailableSortType, DEFAULT_SORT_TYPE};

@@ -1,4 +1,4 @@
-import { availableSortType, DEFAULT_SORT_TYPE, SortType } from '../const.js';
+import { AvailableSortType, DEFAULT_SORT_TYPE, SortType } from '../const.js';
 import { remove, render, RenderPosition, replace } from '../framework/render.js';
 import { updateItem } from '../utils/common.js';
 import { filterPoints } from '../utils/filter.js';
@@ -52,7 +52,7 @@ export default class PointsBoardPresenter {
   #renderBoard () {
     render(this.#pointsBoardComponent, this.#pointsBoardContainer);
 
-    if (!this.points.length) {
+    if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
     }
@@ -64,7 +64,7 @@ export default class PointsBoardPresenter {
     const sortTypes = Object.values(SortType)
       .map((type) => ({
         type,
-        isDisabled: !availableSortType[type],
+        isDisabled: !AvailableSortType[type],
       }));
 
     const prevSortComponent = this.#tripSortComponent;
