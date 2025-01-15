@@ -7,15 +7,17 @@ export default class PointPresenter {
   #pointsListContainer = null;
   #pointComponent = null;
   #pointEditComponent = null;
-  #pointsModel = null;
+  #offers = null;
   #point = null;
+  #destinations = null;
   #handleDataChange = null;
   #mode = Mode.DEFAULT;
   #handleModeChange = null;
 
-  constructor ({pointsListContainer, pointsModel, onDataChange, onModeChange}) {
+  constructor ({pointsListContainer, offers, destinations, onDataChange, onModeChange}) {
     this.#pointsListContainer = pointsListContainer;
-    this.#pointsModel = pointsModel;
+    this.#offers = offers;
+    this.#destinations = destinations;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
   }
@@ -28,18 +30,16 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointItemView({
       point: this.#point,
-      offers: [...this.#pointsModel.getOffersById(this.#point.type, this.#point.offers)],
-      destination: this.#pointsModel.getDestinationById(this.#point.destination),
+      offers: this.#offers,
+      destinations: this.#destinations,
       onEditClick: this.#handleEditClick,
       onFavoriteClick: this.#handleFavouriteClick,
     });
 
     this.#pointEditComponent = new PointEditView({
       point: this.#point,
-      offers: this.#pointsModel.getOffersByType(this.#point.type),
-      checkedOffers: [...this.#pointsModel.getOffersById(this.#point.type, this.#point.offers)],
-      destination: this.#pointsModel.getDestinationById(this.#point.destination),
-      destinations: this.#pointsModel.destinations,
+      offers: this.#offers,
+      destinations: this.#destinations,
       onFormSubmit: this.#handleFormSubmit
     });
 
