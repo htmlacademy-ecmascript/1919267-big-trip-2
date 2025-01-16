@@ -62,12 +62,12 @@ export default class PointItemView extends AbstractView {
   #handleEditClick = null;
   #handleFavoriteClick = null;
 
-  constructor ({point, offers, destinations, onEditClick, onFavoriteClick}) {
+  constructor ({point, offers, destinations, onArrowClick, onFavoriteClick}) {
     super();
     this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
-    this.#handleEditClick = onEditClick;
+    this.#handleEditClick = onArrowClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);

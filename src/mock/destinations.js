@@ -10,8 +10,8 @@ const mockDestinations = [
   {
     id: '185f6061-5967-4a65-8a41-dd923c470eb3',
     name: 'London',
-    description:  'The capital of the United Kingdom and one of the greatest cities in history and modernity. In Westminster, the government operates, and it is also home to Buckingham Palace, the best national galleries, museums, theaters, and clubs. London is constantly changing: from a Roman, and then an early-medieval fortress, it transformed into a major city. After the Great Fire of London in 1666, it literally rose from the ashes, astonishing everyone with its Baroque-style buildings. During the Georgian era, it embodied the dream of elegance, and during Queen Victoria\'s reign, it became the embodiment of the British Empire. Today, it is a major financial center.',
-    photos: Array.from({length: getRandomPositiveInteger(0, 5)}, () => `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`)
+    description: '',
+    photos: []
   },
   {
     id: '9adb05f5-5a7e-4df1-a47b-079853d44bb3',

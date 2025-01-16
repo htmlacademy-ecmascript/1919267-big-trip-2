@@ -17,4 +17,8 @@ function getCheckedOffersByType (point, offers) {
   return availableOffers.filter((offer) => checkedOffers.includes(offer.id));
 }
 
-export {getDestinationById, getOffersByType, getCheckedOffersByType};
+function getDestinationIdByName (destinationName, destinations) {
+  return destinations.find((item) => item.name === destinationName).id ?? '';
+}
+
+export {getDestinationById, getOffersByType, getCheckedOffersByType, getDestinationIdByName};
