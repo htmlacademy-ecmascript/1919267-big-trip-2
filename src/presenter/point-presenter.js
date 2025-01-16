@@ -7,15 +7,17 @@ export default class PointPresenter {
   #pointsListContainer = null;
   #pointComponent = null;
   #pointEditComponent = null;
-  #pointsModel = null;
+  #offers = null;
   #point = null;
+  #destinations = null;
   #handleDataChange = null;
   #mode = Mode.DEFAULT;
   #handleModeChange = null;
 
-  constructor ({pointsListContainer, pointsModel, onDataChange, onModeChange}) {
+  constructor ({pointsListContainer, offers, destinations, onDataChange, onModeChange}) {
     this.#pointsListContainer = pointsListContainer;
-    this.#pointsModel = pointsModel;
+    this.#offers = offers;
+    this.#destinations = destinations;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
   }
@@ -28,19 +30,18 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointItemView({
       point: this.#point,
-      offers: [...this.#pointsModel.getOffersById(this.#point.type, this.#point.offers)],
-      destination: this.#pointsModel.getDestinationById(this.#point.destination),
-      onEditClick: this.#handleEditClick,
+      offers: this.#offers,
+      destinations: this.#destinations,
+      onArrowClick: this.#handleArrowClick,
       onFavoriteClick: this.#handleFavouriteClick,
     });
 
     this.#pointEditComponent = new PointEditView({
       point: this.#point,
-      offers: this.#pointsModel.getOffersByType(this.#point.type),
-      checkedOffers: [...this.#pointsModel.getOffersById(this.#point.type, this.#point.offers)],
-      destination: this.#pointsModel.getDestinationById(this.#point.destination),
-      destinations: this.#pointsModel.destinations,
-      onFormSubmit: this.#handleFormSubmit
+      offers: this.#offers,
+      destinations: this.#destinations,
+      onArrowClick: this.#handleFormCollapse,
+      onFormSubmit: this.#handleFormSubmit,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -62,6 +63,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   }
@@ -70,6 +72,10 @@ export default class PointPresenter {
     remove(this.#pointComponent);
     remove(this.#pointEditComponent);
   }
+
+  #handleFormCollapse = () => {
+    this.resetView();
+  };
 
   #replaceCardToForm() {
     replace(this.#pointEditComponent, this.#pointComponent);
@@ -87,11 +93,12 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   };
 
-  #handleEditClick = () => {
+  #handleArrowClick = () => {
     this.#replaceCardToForm();
   };
 

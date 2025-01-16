@@ -32,6 +32,14 @@ export default class PointsBoardPresenter {
     return sortItems(this.#currentSortType, filteredPoints);
   }
 
+  get offers () {
+    return this.#pointsModel.offers;
+  }
+
+  get destinations () {
+    return this.#pointsModel.destinations;
+  }
+
   init() {
     this.#boardPoints = [...this.#pointsModel.points];
     this.#renderBoard();
@@ -40,7 +48,8 @@ export default class PointsBoardPresenter {
   #renderPoint (point) {
     const pointPresenter = new PointPresenter({
       pointsListContainer: this.#pointsListComponent.element,
-      pointsModel: this.#pointsModel,
+      offers: this.offers,
+      destinations: this.destinations,
       onDataChange: this.#handleDataChange,
       onModeChange:this.#handleModeChange,
     });

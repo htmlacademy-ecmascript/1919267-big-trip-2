@@ -25,5 +25,5 @@ export {
   getRandomArrayElement,
   getRandomPositiveInteger,
   capitalizeFirstLetter,
-  updateItem
+  updateItem,
 };
