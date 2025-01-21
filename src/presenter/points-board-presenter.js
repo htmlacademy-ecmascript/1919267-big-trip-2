@@ -7,6 +7,7 @@ import NoPointsView from '../view/no-points-view.js';
 import PointsBoardView from '../view/points-board-view.js';
 import PointsListView from '../view/points-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
+import NewPointPresenter from './new-point-presenter.js';
 import PointPresenter from './point-presenter.js';
 
 export default class PointsBoardPresenter {
@@ -16,14 +17,18 @@ export default class PointsBoardPresenter {
   #pointsPresenters = new Map();
   #currentSortType = DEFAULT_SORT_TYPE;
 
+  #newPointPresenter = null;
   #tripSortComponent = null;
   #pointsListComponent = new PointsListView();
   #pointsBoardComponent = new PointsBoardView();
   #noPointsComponent = new NoPointsView();
 
-  constructor({pointsBoardContainer, pointsModel}) {
+  #handleNewPointFormClose = null;
+
+  constructor({pointsBoardContainer, pointsModel, onNewPointFormClose}) {
     this.#pointsBoardContainer = pointsBoardContainer;
     this.#pointsModel = pointsModel;
+    this.#handleNewPointFormClose = onNewPointFormClose;
   }
 
   get points () {
@@ -42,8 +47,36 @@ export default class PointsBoardPresenter {
 
   init() {
     this.#boardPoints = [...this.#pointsModel.points];
+    this.#newPointPresenter = new NewPointPresenter({
+      pointsListContainer: this.#pointsListComponent.element,
+      destinations: this.destinations,
+      offers: this.offers,
+      onNewPointDestroy: this.#handleNewPointCancel
+    });
     this.#renderBoard();
   }
+
+  createNewPoint() {
+    this.#currentSortType = DEFAULT_SORT_TYPE;
+
+    if (this.points.length === 0) {
+      if (this.#noPointsComponent) {
+        remove(this.#noPointsComponent);
+      }
+      this.#renderPointsList();
+    }
+
+    this.#newPointPresenter.init();
+  }
+
+  #handleNewPointCancel = () => {
+    if (this.points.length === 0) {
+      remove(this.#tripSortComponent);
+      remove(this.#pointsListComponent);
+      this.#renderNoPoints();
+    }
+    this.#handleNewPointFormClose();
+  };
 
   #renderPoint (point) {
     const pointPresenter = new PointPresenter({
@@ -103,6 +136,7 @@ export default class PointsBoardPresenter {
   }
 
   #clearPointsList () {
+    this.#newPointPresenter.destroy();
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());
     this.#pointsPresenters.clear();
   }
@@ -117,6 +151,7 @@ export default class PointsBoardPresenter {
   };
 
   #handleModeChange = () => {
+    this.#newPointPresenter.destroy();
     this.#pointsPresenters.forEach((presenter) => presenter.resetView());
   };
 

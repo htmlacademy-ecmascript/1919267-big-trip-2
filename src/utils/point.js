@@ -1,5 +1,9 @@
 function getDestinationById (destinations, destinationId) {
-  return destinations.find((destination) => destination.id === destinationId);
+  const currentDestination = destinations.find((destination) => destination.id === destinationId);
+  if (currentDestination === undefined) {
+    return {};
+  }
+  return currentDestination;
 }
 
 function getOffersByType (offers, type) {
@@ -18,7 +22,7 @@ function getCheckedOffersByType (point, offers) {
 }
 
 function getDestinationIdByName (destinationName, destinations) {
-  return destinations.find((item) => item.name === destinationName).id ?? '';
+  return destinations.find((item) => item.name === destinationName)?.id ?? '';
 }
 
 export {getDestinationById, getOffersByType, getCheckedOffersByType, getDestinationIdByName};
