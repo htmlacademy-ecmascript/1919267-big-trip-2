@@ -29,11 +29,11 @@ render(newPointButtonComponent, tripMainContainer);
 
 function handleNewPointButtonClick () {
   pointsBoardPresenter.createNewPoint();
-  newPointButtonComponent?.element.setAttribute('disabled', true);
+  newPointButtonComponent.element.disabled = true;
 }
 
 function handleNewPointFormClose () {
-  newPointButtonComponent?.element.setAttribute('disabled', false);
+  newPointButtonComponent.element.disabled = false;
 }
 
 filtersPresenter.init();

@@ -55,6 +55,7 @@ export default class PointPresenter {
 
     if (this.#mode === Mode.EDIT) {
       replace(this.#pointEditComponent, prevPointEditComponent);
+      this.#mode = Mode.DEFAULT;
     }
 
     remove(prevPointComponent);

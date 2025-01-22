@@ -58,5 +58,20 @@ const AvailableSortType = {
 };
 
 const DEFAULT_SORT_TYPE = SortType.DAY;
+const DEFAULT_FILTER_TYPE = FilterType.EVERYTHING;
 
-export {BLANK_POINT, Price, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS, FilterType, Mode, SortType, AvailableSortType, DEFAULT_SORT_TYPE};
+export {
+  BLANK_POINT,
+  Price,
+  MILLISECONDS_IN_MINUTES,
+  SECONDS_IN_MINUTES,
+  HOURS_IN_DAY,
+  DateFormat,
+  MONTHS,
+  FilterType,
+  Mode,
+  SortType,
+  AvailableSortType,
+  DEFAULT_SORT_TYPE,
+  DEFAULT_FILTER_TYPE
+};

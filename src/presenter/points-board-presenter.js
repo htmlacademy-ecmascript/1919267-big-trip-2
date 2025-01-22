@@ -13,9 +13,9 @@ import PointPresenter from './point-presenter.js';
 export default class PointsBoardPresenter {
   #pointsBoardContainer = null;
   #pointsModel = null;
-  #boardPoints = [];
   #pointsPresenters = new Map();
   #currentSortType = DEFAULT_SORT_TYPE;
+  #currentFilterType = null;
 
   #newPointPresenter = null;
   #tripSortComponent = null;
@@ -32,8 +32,8 @@ export default class PointsBoardPresenter {
   }
 
   get points () {
-    const filterType = this.#pointsModel.currentFilter;
-    const filteredPoints = filterPoints(this.#pointsModel.points, filterType);
+    this.#currentFilterType = this.#pointsModel.currentFilter;
+    const filteredPoints = filterPoints([...this.#pointsModel.points], this.#currentFilterType);
     return sortItems(this.#currentSortType, filteredPoints);
   }
 
@@ -46,7 +46,6 @@ export default class PointsBoardPresenter {
   }
 
   init() {
-    this.#boardPoints = [...this.#pointsModel.points];
     this.#newPointPresenter = new NewPointPresenter({
       pointsListContainer: this.#pointsListComponent.element,
       destinations: this.destinations,
@@ -66,6 +65,8 @@ export default class PointsBoardPresenter {
       this.#renderPointsList();
     }
 
+    this.#clearPointsList();
+    this.#renderPoints();
     this.#newPointPresenter.init();
   }
 
@@ -100,6 +101,7 @@ export default class PointsBoardPresenter {
     }
     this.#renderSort();
     this.#renderPointsList();
+    this.#renderPoints();
   }
 
   #renderSort () {
@@ -131,8 +133,10 @@ export default class PointsBoardPresenter {
   }
 
   #renderPointsList () {
+    if (this.#pointsListComponent === null) {
+      this.#pointsListComponent = new PointsListView();
+    }
     render(this.#pointsListComponent, this.#pointsBoardComponent.element);
-    this.#renderPoints();
   }
 
   #clearPointsList () {
@@ -146,7 +150,7 @@ export default class PointsBoardPresenter {
   }
 
   #handleDataChange = (updatedPoint) => {
-    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
+    this.points = updateItem(this.points, updatedPoint);
     this.#pointsPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
@@ -167,6 +171,6 @@ export default class PointsBoardPresenter {
 
   #sortPoints = (sortType) => {
     this.#currentSortType = sortType;
-    this.#boardPoints = sortItems(this.#currentSortType, this.points);
+    this.points = sortItems(this.#currentSortType, this.points);
   };
 }
