@@ -20,7 +20,7 @@ const filter = {
   [FilterType.PRESENT]: (points) => points.filter((point) => isPointPresent(point))
 };
 
-const filterPoints = (points, filterType) => (filter[filterType])(points);
+const filterItems = (items, filterType) => (filter[filterType])(items);
 
 const generateFilters = (points) => Object.entries(filter).map(
   ([filterType, filterMethod]) => ({
@@ -29,4 +29,4 @@ const generateFilters = (points) => Object.entries(filter).map(
   })
 );
 
-export {filterPoints, generateFilters};
+export {filterItems, generateFilters};

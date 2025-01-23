@@ -182,17 +182,19 @@ export default class PointEditView extends AbstractStatefulView {
   #destinations = [];
   #handleArrowClick = null;
   #handleFormSubmit = null;
+  #handleDeleteClick = null;
   #offerElements = null;
   #dateFromPicker = null;
   #dateToPicker = null;
   #isNewPoint = false;
 
-  constructor ({point = BLANK_POINT, offers, destinations, isNewPoint, onArrowClick, onFormSubmit}) {
+  constructor ({point = BLANK_POINT, offers, destinations, isNewPoint, onArrowClick, onFormSubmit, onDeleteClick}) {
     super();
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleArrowClick = onArrowClick;
     this.#handleFormSubmit = onFormSubmit;
+    this.#handleDeleteClick = onDeleteClick;
     this.#isNewPoint = isNewPoint;
     this._setState(PointEditView.parsePointToState(point));
     this._restoreHandlers();
@@ -218,6 +220,9 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
+    this.element
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this.#pointDeleteClickHandler);
 
     if (offersBlockElement !== null) {
       offersBlockElement.addEventListener('change', this.#offerChangeHandler);
@@ -309,7 +314,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit();
+    this.#handleFormSubmit(PointEditView.parseStateToPoint(this._state));
   };
 
   #typeChangeHandler = (evt) => {
@@ -372,4 +377,9 @@ export default class PointEditView extends AbstractStatefulView {
       return isEmpty;
     });
   }
+
+  #pointDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(PointEditView.parseStateToPoint(this._state));
+  };
 }

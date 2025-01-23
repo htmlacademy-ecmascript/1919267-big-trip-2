@@ -1,7 +1,7 @@
 import { AvailableSortType, DEFAULT_SORT_TYPE, SortType } from '../const.js';
 import { remove, render, RenderPosition, replace } from '../framework/render.js';
 import { updateItem } from '../utils/common.js';
-import { filterPoints } from '../utils/filter.js';
+import { filterItems } from '../utils/filter.js';
 import {sortItems} from '../utils/sorting.js';
 import NoPointsView from '../view/no-points-view.js';
 import PointsBoardView from '../view/points-board-view.js';
@@ -29,11 +29,13 @@ export default class PointsBoardPresenter {
     this.#pointsBoardContainer = pointsBoardContainer;
     this.#pointsModel = pointsModel;
     this.#handleNewPointFormClose = onNewPointFormClose;
+
+    this.#pointsModel.addObserver(this.#handleModelEvent);
   }
 
   get points () {
     this.#currentFilterType = this.#pointsModel.currentFilter;
-    const filteredPoints = filterPoints([...this.#pointsModel.points], this.#currentFilterType);
+    const filteredPoints = filterItems([...this.#pointsModel.points], this.#currentFilterType);
     return sortItems(this.#currentSortType, filteredPoints);
   }
 
@@ -55,6 +57,10 @@ export default class PointsBoardPresenter {
     this.#renderBoard();
   }
 
+  #handleViewAction = (actionType, updateType, updatedItem) => ({actionType, updateType, updatedItem});
+
+  #handleModelEvent = (updateType, data) => ({updateType, data});
+
   createNewPoint() {
     this.#currentSortType = DEFAULT_SORT_TYPE;
 
@@ -65,7 +71,7 @@ export default class PointsBoardPresenter {
       this.#renderPointsList();
     }
 
-    this.#clearPointsList();
+    this.#clearBoard();
     this.#renderPoints();
     this.#newPointPresenter.init();
   }
@@ -84,7 +90,7 @@ export default class PointsBoardPresenter {
       pointsListContainer: this.#pointsListComponent.element,
       offers: this.offers,
       destinations: this.destinations,
-      onDataChange: this.#handleDataChange,
+      onDataChange: this.#handleViewAction,
       onModeChange:this.#handleModeChange,
     });
 
@@ -139,7 +145,7 @@ export default class PointsBoardPresenter {
     render(this.#pointsListComponent, this.#pointsBoardComponent.element);
   }
 
-  #clearPointsList () {
+  #clearBoard () {
     this.#newPointPresenter.destroy();
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());
     this.#pointsPresenters.clear();
@@ -163,14 +169,9 @@ export default class PointsBoardPresenter {
     if (this.#currentSortType === sortType) {
       return;
     }
-    this.#sortPoints(sortType);
-    this.#clearPointsList();
+    this.#currentSortType = sortType;
+    this.#clearBoard();
     this.#renderSort();
     this.#renderBoard();
-  };
-
-  #sortPoints = (sortType) => {
-    this.#currentSortType = sortType;
-    this.points = sortItems(this.#currentSortType, this.points);
   };
 }
