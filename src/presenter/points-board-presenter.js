@@ -54,6 +54,7 @@ export default class PointsBoardPresenter {
       pointsListContainer: this.#pointsListComponent.element,
       destinations: this.destinations,
       offers: this.offers,
+      onDataChange: this.#handleViewAction,
       onNewPointDestroy: this.#handleNewPointCancel
     });
     this.#renderBoard();
