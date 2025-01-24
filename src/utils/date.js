@@ -43,8 +43,17 @@ function getDuration(dateFrom, dateTo){
   return dayjs.duration(diff).format('mm[M]');
 }
 
+function isDatesEqual (dateA, dateB) {
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+}
+
+function isPricesEqual (numberA, numberB) {
+  return numberA === numberB;
+}
 
 export {
   formatDate,
   getDuration,
+  isDatesEqual,
+  isPricesEqual
 };

@@ -54,7 +54,7 @@ function createOfferTemplate (offer, checkedOffers) {
   const isCheckedOffer = checkedOffers.includes(id) ? 'checked' : '';
 
   return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-${id}" ${isCheckedOffer}>
+    <input class="event__offer-checkbox  visually-hidden" data-offer-id=${id} id="event-offer-${id}-1" type="checkbox" name="event-offer-${id}" ${isCheckedOffer}>
     <label class="event__offer-label" for="event-offer-${id}-1">
       <span class="event__offer-title">${title}</span>
       &plus;&euro;&nbsp;
@@ -352,15 +352,11 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #offerChangeHandler = (evt) => {
-    const offers = [];
-    evt.preventDefault();
-    this.#offerElements.forEach((offerElement) => {
-      if (offerElement.checked) {
-        offers.push(offerElement.id);
-      }
-    });
-
-    this._setState({offers});
+    evt.stopPropagation();
+    const checkedOffers = Array.from(this.#offerElements).
+      filter((item) => item.checked).
+      map((item) => item.dataset.offerId);
+    this._setState({offers: checkedOffers});
   };
 
   #validateFields() {

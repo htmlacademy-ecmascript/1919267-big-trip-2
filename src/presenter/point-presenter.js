@@ -1,5 +1,6 @@
 import { Mode, UpdateType, UserAction } from '../const.js';
 import { remove, render, replace } from '../framework/render.js';
+import { isDatesEqual, isPricesEqual } from '../utils/date.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointItemView from '../view/point-item-view.js';
 
@@ -104,11 +105,15 @@ export default class PointPresenter {
     this.#replaceCardToForm();
   };
 
-  #handleFormSubmit = (point) => {
+  #handleFormSubmit = (updatedPoint) => {
+    const isMinorUpdate = !isDatesEqual(this.#point.dateFrom, updatedPoint.dateFrom)
+    || !isDatesEqual(this.#point.dateTo, updatedPoint.dateTo)
+    || !isPricesEqual(this.#point.basePrice, updatedPoint.basePrice);
+
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
-      point
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      updatedPoint
     );
     this.#replaceFormToCard();
   };
