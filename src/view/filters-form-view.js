@@ -13,7 +13,6 @@ function createFilterItemTemplate (filter, currentFilter) {
           type="radio"
           name="trip-filter"
           value=${type}
-          data-filter-type="${type}"
           ${isDisabled}
           ${isChecked}
         >
@@ -51,6 +50,6 @@ export default class FiltersFormView extends AbstractView {
       return;
     }
 
-    this.#handleFilterTypeChange(evt.target.dataset.filterType);
+    this.#handleFilterTypeChange(evt.target.value);
   };
 }

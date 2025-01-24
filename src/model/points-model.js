@@ -22,14 +22,6 @@ export default class PointsModel extends Observable {
     return this.#destinations;
   }
 
-  get currentFilter () {
-    return this.#currentFilter;
-  }
-
-  set currentFilter (updatedFilter) {
-    this.#currentFilter = updatedFilter;
-  }
-
   updatePoint(updateType, updatedPoint) {
     const index = this.#points.findIndex((point) => point.id === updatedPoint.id);
 

@@ -12,6 +12,7 @@ import PointPresenter from './point-presenter.js';
 export default class PointsBoardPresenter {
   #pointsBoardContainer = null;
   #pointsModel = null;
+  #filtersModel = null;
   #pointsPresenters = new Map();
   #currentSortType = DEFAULT_SORT_TYPE;
   #currentFilterType = null;
@@ -24,16 +25,18 @@ export default class PointsBoardPresenter {
 
   #handleNewPointFormClose = null;
 
-  constructor({pointsBoardContainer, pointsModel, onNewPointFormClose}) {
+  constructor({pointsBoardContainer, pointsModel, filtersModel, onNewPointFormClose}) {
     this.#pointsBoardContainer = pointsBoardContainer;
     this.#pointsModel = pointsModel;
+    this.#filtersModel = filtersModel;
     this.#handleNewPointFormClose = onNewPointFormClose;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filtersModel.addObserver(this.#handleModelEvent);
   }
 
   get points () {
-    this.#currentFilterType = this.#pointsModel.currentFilter;
+    this.#currentFilterType = this.#filtersModel.currentFilter;
     const filteredPoints = filterItems([...this.#pointsModel.points], this.#currentFilterType);
     return sortItems(this.#currentSortType, filteredPoints);
   }
