@@ -92,6 +92,7 @@ export default class PointsBoardPresenter {
 
   createNewPoint() {
     this.#currentSortType = DEFAULT_SORT_TYPE;
+    this.#filtersModel.setCurrentFilter(UpdateType.MAJOR, DEFAULT_FILTER_TYPE);
 
     if (this.points.length === 0) {
       if (this.#noPointsComponent) {
@@ -100,8 +101,6 @@ export default class PointsBoardPresenter {
       this.#renderPointsList();
     }
 
-    this.#clearBoard();
-    this.#renderPoints();
     this.#newPointPresenter.init();
   }
 
