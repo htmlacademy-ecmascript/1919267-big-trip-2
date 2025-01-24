@@ -1,6 +1,5 @@
-import { AvailableSortType, DEFAULT_SORT_TYPE, SortType } from '../const.js';
-import { remove, render, RenderPosition, replace } from '../framework/render.js';
-import { updateItem } from '../utils/common.js';
+import { DEFAULT_SORT_TYPE, UpdateType, UserAction } from '../const.js';
+import { remove, render, RenderPosition } from '../framework/render.js';
 import { filterItems } from '../utils/filter.js';
 import {sortItems} from '../utils/sorting.js';
 import NoPointsView from '../view/no-points-view.js';
@@ -57,9 +56,35 @@ export default class PointsBoardPresenter {
     this.#renderBoard();
   }
 
-  #handleViewAction = (actionType, updateType, updatedItem) => ({actionType, updateType, updatedItem});
+  #handleViewAction = (actionType, updateType, updatedItem) => {
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this.#pointsModel.updatePoint(updateType, updatedItem);
+        break;
+      case UserAction.ADD_POINT:
+        this.#pointsModel.addPoint(updateType, updatedItem);
+        break;
+      case UserAction.DELETE_POINT:
+        this.#pointsModel.deletePoint(updateType, updatedItem);
+        break;
+    }
+  };
 
-  #handleModelEvent = (updateType, data) => ({updateType, data});
+  #handleModelEvent = (updateType, data) => {
+    switch(updateType) {
+      case UpdateType.PATCH:
+        this.#pointsPresenters.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
+      case UpdateType.MAJOR:
+        this.#clearBoard(true);
+        this.#renderBoard();
+        break;
+    }
+  };
 
   createNewPoint() {
     this.#currentSortType = DEFAULT_SORT_TYPE;
@@ -111,25 +136,10 @@ export default class PointsBoardPresenter {
   }
 
   #renderSort () {
-    const sortTypes = Object.values(SortType)
-      .map((type) => ({
-        type,
-        isDisabled: !AvailableSortType[type],
-      }));
-
-    const prevSortComponent = this.#tripSortComponent;
     this.#tripSortComponent = new TripSortView({
-      sortItems: sortTypes,
       currentSortType: this.#currentSortType,
       onSortTypeChange: this.#sortChangeHandler
     });
-
-    if(prevSortComponent){
-      replace(this.#tripSortComponent, prevSortComponent);
-      remove(prevSortComponent);
-    }else{
-      render(this.#tripSortComponent, this.#pointsBoardContainer);
-    }
 
     render(this.#tripSortComponent, this.#pointsBoardComponent.element, RenderPosition.AFTERBEGIN);
   }
@@ -145,20 +155,22 @@ export default class PointsBoardPresenter {
     render(this.#pointsListComponent, this.#pointsBoardComponent.element);
   }
 
-  #clearBoard () {
+  #clearBoard (resetSortType = false) {
     this.#newPointPresenter.destroy();
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());
     this.#pointsPresenters.clear();
+
+    remove(this.#tripSortComponent);
+    remove(this.#noPointsComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = DEFAULT_SORT_TYPE;
+    }
   }
 
   #renderPoints () {
     this.points.forEach((item) => this.#renderPoint(item));
   }
-
-  #handleDataChange = (updatedPoint) => {
-    this.points = updateItem(this.points, updatedPoint);
-    this.#pointsPresenters.get(updatedPoint.id).init(updatedPoint);
-  };
 
   #handleModeChange = () => {
     this.#newPointPresenter.destroy();
@@ -171,7 +183,6 @@ export default class PointsBoardPresenter {
     }
     this.#currentSortType = sortType;
     this.#clearBoard();
-    this.#renderSort();
     this.#renderBoard();
   };
 }
