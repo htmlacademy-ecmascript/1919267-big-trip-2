@@ -1,4 +1,4 @@
-import { DEFAULT_SORT_TYPE, UpdateType, UserAction } from '../const.js';
+import { DEFAULT_FILTER_TYPE, DEFAULT_SORT_TYPE, UpdateType, UserAction } from '../const.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
 import { filterItems } from '../utils/filter.js';
 import {sortItems} from '../utils/sorting.js';
@@ -15,13 +15,13 @@ export default class PointsBoardPresenter {
   #filtersModel = null;
   #pointsPresenters = new Map();
   #currentSortType = DEFAULT_SORT_TYPE;
-  #currentFilterType = null;
+  #currentFilterType = DEFAULT_FILTER_TYPE;
 
   #newPointPresenter = null;
   #tripSortComponent = null;
   #pointsListComponent = new PointsListView();
   #pointsBoardComponent = new PointsBoardView();
-  #noPointsComponent = new NoPointsView();
+  #noPointsComponent = null;
 
   #handleNewPointFormClose = null;
 
@@ -148,6 +148,7 @@ export default class PointsBoardPresenter {
   }
 
   #renderNoPoints () {
+    this.#noPointsComponent = new NoPointsView({filterType: this.#currentFilterType});
     render(this.#noPointsComponent, this.#pointsBoardComponent.element, RenderPosition.AFTERBEGIN);
   }
 
@@ -164,7 +165,9 @@ export default class PointsBoardPresenter {
     this.#pointsPresenters.clear();
 
     remove(this.#tripSortComponent);
-    remove(this.#noPointsComponent);
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
+    }
 
     if (resetSortType) {
       this.#currentSortType = DEFAULT_SORT_TYPE;

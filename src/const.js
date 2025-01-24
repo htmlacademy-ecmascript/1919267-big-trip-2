@@ -72,6 +72,13 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
+const FilterTypeNoItemsMessage = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.PAST]: 'There are no past events now',
+};
+
 export {
   BLANK_POINT,
   Price,
@@ -87,5 +94,6 @@ export {
   DEFAULT_SORT_TYPE,
   DEFAULT_FILTER_TYPE,
   UserAction,
-  UpdateType
+  UpdateType,
+  FilterTypeNoItemsMessage
 };
