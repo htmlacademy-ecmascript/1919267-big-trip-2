@@ -95,11 +95,11 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
-                    <label class="event__type  event__type-btn" for="event-type-toggle-${he.encode(id)}">
+                    <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
                       <span class="visually-hidden">Choose event type</span>
                       <img class="event__type-icon" width="17" height="17" src="img/icons/${he.encode(type)}.png" alt="Event type icon">
                     </label>
-                    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${he.encode(id)}" type="checkbox">
+                    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
 
                     <div class="event__type-list">
                       <fieldset class="event__type-group">
