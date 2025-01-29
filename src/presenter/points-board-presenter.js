@@ -8,9 +8,11 @@ import PointsListView from '../view/points-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import NewPointPresenter from './new-point-presenter.js';
 import PointPresenter from './point-presenter.js';
+import TripInfoPresenter from './trip-info-presenter.js';
 
 export default class PointsBoardPresenter {
   #pointsBoardContainer = null;
+  #tripMainContainer = null;
   #pointsModel = null;
   #filtersModel = null;
   #pointsPresenters = new Map();
@@ -22,11 +24,13 @@ export default class PointsBoardPresenter {
   #pointsListComponent = new PointsListView();
   #pointsBoardComponent = new PointsBoardView();
   #noPointsComponent = null;
+  #tripInfoPresenter = null;
 
   #handleNewPointFormClose = null;
 
-  constructor({pointsBoardContainer, pointsModel, filtersModel, onNewPointFormClose}) {
+  constructor({tripMainContainer, pointsBoardContainer, pointsModel, filtersModel, onNewPointFormClose}) {
     this.#pointsBoardContainer = pointsBoardContainer;
+    this.#tripMainContainer = tripMainContainer;
     this.#pointsModel = pointsModel;
     this.#filtersModel = filtersModel;
     this.#handleNewPointFormClose = onNewPointFormClose;
@@ -133,6 +137,7 @@ export default class PointsBoardPresenter {
       this.#renderNoPoints();
       return;
     }
+    this.#renderInfo();
     this.#renderSort();
     this.#renderPointsList();
     this.#renderPoints();
@@ -161,6 +166,7 @@ export default class PointsBoardPresenter {
 
   #clearBoard (resetSortType = false) {
     this.#newPointPresenter.destroy();
+    this.#tripInfoPresenter.destroy();
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());
     this.#pointsPresenters.clear();
 
@@ -191,4 +197,12 @@ export default class PointsBoardPresenter {
     this.#clearBoard();
     this.#renderBoard();
   };
+
+  #renderInfo() {
+    this.#tripInfoPresenter = new TripInfoPresenter({
+      tripMainContainer: this.#tripMainContainer,
+      pointsModel: this.#pointsModel,
+    });
+    this.#tripInfoPresenter.init();
+  }
 }

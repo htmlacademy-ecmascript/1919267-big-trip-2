@@ -31,4 +31,4 @@ function sortItems (currentType, items) {
   return sorting[currentType](items);
 }
 
-export {sortItems};
+export {sortItems, getPointsDateDifference};

@@ -4,7 +4,6 @@ import PointsModel from './model/points-model.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
 import PointsBoardPresenter from './presenter/points-board-presenter.js';
 import NewPointButtonView from './view/new-point-button-view.js';
-//import TripInfoView from './view/trip-info-view.js';
 
 const tripMainContainer = document.querySelector('.trip-main');
 const tripPointsBoardContainer = document.querySelector('.trip-events');
@@ -17,7 +16,9 @@ const filtersPresenter = new FiltersPresenter({
   pointsModel,
   filtersModel,
 });
+
 const pointsBoardPresenter = new PointsBoardPresenter({
+  tripMainContainer,
   pointsBoardContainer: tripPointsBoardContainer,
   pointsModel,
   filtersModel,
@@ -28,7 +29,6 @@ const newPointButtonComponent = new NewPointButtonView({
   onNewPointButtonClick: handleNewPointButtonClick
 });
 
-//render(new TripInfoView(pointsModel), tripMainContainer, RenderPosition.AFTERBEGIN);
 render(newPointButtonComponent, tripMainContainer);
 
 function handleNewPointButtonClick () {

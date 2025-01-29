@@ -1,57 +1,39 @@
-import { DateFormat } from '../const.js';
-import { formatDate } from '../utils/date.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-function getTripDate (points) {
-  const firstMonth = new Date(points[0].dateFrom).getMonth();
-  const lastMonth = new Date(points[points.length - 1].dateFrom).getMonth();
-  const dateFormat = firstMonth === lastMonth ? DateFormat.TRIP_INFO_SHORT : DateFormat.TRIP_INFO;
-
-  return `${formatDate(points[0].dateFrom, dateFormat)}&nbsp;&mdash;&nbsp;${formatDate(points[points.length - 1].dateTo, DateFormat.TRIP_INFO)}`;
-}
-
-function getTripTitle (destinations) {
-  if (destinations.length > 3) {
-    return `${destinations[0].name} &mdash; ... &mdash; ${destinations[destinations.length - 1].name}`;
-  }
-  return destinations.reduce((acc, item) => `${acc}  &mdash; ${item.name}`, destinations[0].name);
-}
-
-function getTripTotalPrice (points) {
-  return points.reduce((acc, item) => acc + item.basePrice, points[0].basePrice);
-}
-
-function createTripInfoTemplate(points, destinations) {
-  if (points.length === 0) {
-    return '';
-  }
-
+function createTripInfoTemplate({ title, startDate, endDate, totalCost }) {
   return `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
-              <h1 class="trip-info__title">${getTripTitle(destinations)}</h1>
+              <h1 class="trip-info__title">${title}</h1>
 
-              <p class="trip-info__dates">${getTripDate(points)}</p>
+              <p class="trip-info__dates">${startDate}&nbsp;—&nbsp;${endDate}</p>
             </div>
 
             <p class="trip-info__cost">
-              Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTripTotalPrice(points)}</span>
+              Total: &euro;&nbsp;<span class="trip-info__cost-value">${String(totalCost)}</span>
             </p>
           </section>`;
 }
 
 export default class TripInfoView extends AbstractView {
-  #pointsModel = null;
-  #points = [];
-  #destinations = [];
+  #destinationsTitle = '';
+  #startDate = '';
+  #endDate = '';
+  #totalCost = 0;
 
-  constructor (pointsModel) {
+  constructor ({destinationsTitle, startDate, endDate, totalCost}) {
     super();
-    this.#pointsModel = pointsModel;
-    this.#points = [...this.#pointsModel.points].toSorted((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom));
-    this.#destinations = this.#points.map((point) => this.#pointsModel.getDestinationById(point.destination));
+    this.#destinationsTitle = destinationsTitle;
+    this.#startDate = startDate;
+    this.#endDate = endDate;
+    this.#totalCost = totalCost;
   }
 
   get template() {
-    return createTripInfoTemplate(this.#points, this.#destinations);
+    return createTripInfoTemplate({
+      title: this.#destinationsTitle,
+      startDate: this.#startDate,
+      endDate: this.#endDate,
+      totalCost: this.#totalCost
+    });
   }
 }
