@@ -24,6 +24,7 @@ export default class TripInfoPresenter {
     this.#sortedPoints = [...this.#pointsModel.points].sort(getPointsDateDifference);
     this.#offers = this.#pointsModel.offers;
     this.#destinations = this.#pointsModel.destinations;
+
     this.#pointsModel.addObserver(this.#handleModelEvent);
   }
 
@@ -52,9 +53,10 @@ export default class TripInfoPresenter {
     const destinationsNames = this.#sortedPoints.map((point) => getDestinationById(this.#destinations, point.destination).name);
 
     if (destinationsNames.length <= 3) {
-      this.#destinationsTitle = destinationsNames.join(' - ');
+      this.#destinationsTitle = destinationsNames.join(' &mdash; ');
+    } else {
+      this.#destinationsTitle = `${destinationsNames[0]} &mdash; ... &mdash;  ${destinationsNames[destinationsNames.length - 1]}`;
     }
-    this.#destinationsTitle = `${destinationsNames[0]} - ... - ${destinationsNames[destinationsNames.length - 1]}`;
 
     return this.#destinationsTitle;
   }
@@ -73,7 +75,7 @@ export default class TripInfoPresenter {
     const checkedOffersPrices = this.#sortedPoints.map((point) => getCheckedOffersByType(point, this.#offers).map(({price}) => price));
     const totalCheckedOffersPrice = checkedOffersPrices.flat().reduce((acc, num) => acc + num, 0);
 
-    const totalTripBasePriceCost = this.#sortedPoints.map(({basePrice}) => basePrice).reduce((acc, num) => acc + num, 0);
+    const totalTripBasePriceCost = this.#sortedPoints.map((point) => point.basePrice).reduce((acc, num) => acc + num, 0);
     this.#totalCost = totalTripBasePriceCost + totalCheckedOffersPrice;
     return this.#totalCost;
   }

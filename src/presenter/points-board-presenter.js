@@ -1,6 +1,6 @@
 import { DEFAULT_FILTER_TYPE, DEFAULT_SORT_TYPE, UpdateType, UserAction } from '../const.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
-import { filterItems } from '../utils/filter.js';
+import { filterPoints } from '../utils/filter.js';
 import {sortItems} from '../utils/sorting.js';
 import NoPointsView from '../view/no-points-view.js';
 import PointsBoardView from '../view/points-board-view.js';
@@ -41,7 +41,7 @@ export default class PointsBoardPresenter {
 
   get points () {
     this.#currentFilterType = this.#filtersModel.currentFilter;
-    const filteredPoints = filterItems([...this.#pointsModel.points], this.#currentFilterType);
+    const filteredPoints = filterPoints([...this.#pointsModel.points], this.#currentFilterType);
     return sortItems(this.#currentSortType, filteredPoints);
   }
 

@@ -108,7 +108,8 @@ export default class PointPresenter {
   #handleFormSubmit = (updatedPoint) => {
     const isMinorUpdate = !isDatesEqual(this.#point.dateFrom, updatedPoint.dateFrom)
     || !isDatesEqual(this.#point.dateTo, updatedPoint.dateTo)
-    || !isPricesEqual(this.#point.basePrice, updatedPoint.basePrice);
+    || !isPricesEqual(this.#point.basePrice, updatedPoint.basePrice)
+    || this.#point.offers.length !== updatedPoint.offers.length;
 
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
