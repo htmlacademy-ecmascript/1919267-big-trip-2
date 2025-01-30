@@ -1,3 +1,4 @@
+import he from 'he';
 import { BLANK_POINT, DateFormat } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { mockOffers } from '../mock/offers.js';
@@ -16,7 +17,7 @@ function createTypeTemplate (type, pointType) {
 }
 
 function createDestinationsListTemplate(destinations) {
-  return destinations.map((destination) => `<option value="${destination.name}"></option>`).join('');
+  return destinations.map((destination) => `<option value="${he.encode(destination.name)}"></option>`).join('');
 }
 
 //DESTINATIONS BLOCK
@@ -26,7 +27,7 @@ function createDestinationPhotosTemplate(pointDestination) {
   }
 
   const photos = pointDestination.photos.map((photo) =>
-    `<img class="event__photo" src="${photo}" alt="${pointDestination.name}">`
+    `<img class="event__photo" src="${he.encode(photo)}" alt="${he.encode(pointDestination.name)}">`
   ).join('');
 
   return `<div class="event__photos-container">
@@ -43,7 +44,7 @@ function createDestinationsBlockTemplate(destination, destinations) {
 
   return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${pointDestination.description}</p>
+      <p class="event__destination-description">${he.encode(pointDestination.description)}</p>
       ${createDestinationPhotosTemplate(pointDestination)}
     </section>`;
 }
@@ -54,11 +55,11 @@ function createOfferTemplate (offer, checkedOffers) {
   const isCheckedOffer = checkedOffers.includes(id) ? 'checked' : '';
 
   return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-${id}" ${isCheckedOffer}>
-    <label class="event__offer-label" for="event-offer-${id}-1">
-      <span class="event__offer-title">${title}</span>
+    <input class="event__offer-checkbox  visually-hidden" data-offer-id=${he.encode(id)} id="event-offer-${he.encode(id)}-1" type="checkbox" name="event-offer-${he.encode(id)}" ${isCheckedOffer}>
+    <label class="event__offer-label" for="event-offer-${he.encode(id)}-1">
+      <span class="event__offer-title">${he.encode(title)}</span>
       &plus;&euro;&nbsp;
-      <span class="event__offer-price">${price}</span>
+      <span class="event__offer-price">${he.encode(String(price))}</span>
     </label>
   </div>`;
 }
@@ -96,7 +97,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
                       <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+                      <img class="event__type-icon" width="17" height="17" src="img/icons/${he.encode(type)}.png" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
 
@@ -117,7 +118,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       id="event-destination-1"
                       type="text"
                       name="event-destination"
-                      value="${destination.name ?? ''}"
+                      value="${he.encode(destination.name ?? '')}"
                       list="destination-list-1"
                       data-field-validated=""
                     >
@@ -153,7 +154,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${basePrice}>
+                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${he.encode(String(basePrice))}>
                   </div>
 
                   <button
@@ -182,17 +183,19 @@ export default class PointEditView extends AbstractStatefulView {
   #destinations = [];
   #handleArrowClick = null;
   #handleFormSubmit = null;
+  #handleDeleteClick = null;
   #offerElements = null;
   #dateFromPicker = null;
   #dateToPicker = null;
   #isNewPoint = false;
 
-  constructor ({point = BLANK_POINT, offers, destinations, isNewPoint, onArrowClick, onFormSubmit}) {
+  constructor ({point = BLANK_POINT, offers, destinations, isNewPoint, onArrowClick, onFormSubmit, onDeleteClick}) {
     super();
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleArrowClick = onArrowClick;
     this.#handleFormSubmit = onFormSubmit;
+    this.#handleDeleteClick = onDeleteClick;
     this.#isNewPoint = isNewPoint;
     this._setState(PointEditView.parsePointToState(point));
     this._restoreHandlers();
@@ -218,6 +221,9 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
+    this.element
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this.#pointDeleteClickHandler);
 
     if (offersBlockElement !== null) {
       offersBlockElement.addEventListener('change', this.#offerChangeHandler);
@@ -309,7 +315,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit();
+    this.#handleFormSubmit(PointEditView.parseStateToPoint(this._state));
   };
 
   #typeChangeHandler = (evt) => {
@@ -334,7 +340,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   #priceChangeHandler = (evt) => {
     evt.preventDefault();
-    const price = +(evt.target.value);
+    const price = parseInt(evt.target.value, 10);
 
     if(isNaN(price) || price < 0) {
       evt.target.value = '';
@@ -342,20 +348,16 @@ export default class PointEditView extends AbstractStatefulView {
     }
 
     this._setState({
-      basePrice: evt.target.value,
+      basePrice: price,
     });
   };
 
   #offerChangeHandler = (evt) => {
-    const offers = [];
     evt.preventDefault();
-    this.#offerElements.forEach((offerElement) => {
-      if (offerElement.checked) {
-        offers.push(offerElement.id);
-      }
-    });
-
-    this._setState({offers});
+    const checkedOffers = Array.from(this.#offerElements).
+      filter((item) => item.checked).
+      map((item) => item.dataset.offerId);
+    this._setState({offers: checkedOffers});
   };
 
   #validateFields() {
@@ -372,4 +374,9 @@ export default class PointEditView extends AbstractStatefulView {
       return isEmpty;
     });
   }
+
+  #pointDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(PointEditView.parseStateToPoint(this._state));
+  };
 }

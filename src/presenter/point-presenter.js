@@ -1,5 +1,6 @@
-import { Mode } from '../const.js';
+import { Mode, UpdateType, UserAction } from '../const.js';
 import { remove, render, replace } from '../framework/render.js';
+import { isDatesEqual, isPricesEqual } from '../utils/date.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointItemView from '../view/point-item-view.js';
 
@@ -42,6 +43,7 @@ export default class PointPresenter {
       destinations: this.#destinations,
       onArrowClick: this.#handleFormCollapse,
       onFormSubmit: this.#handleFormSubmit,
+      onDeleteClick: this.#handleDeleteClick,
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -55,6 +57,7 @@ export default class PointPresenter {
 
     if (this.#mode === Mode.EDIT) {
       replace(this.#pointEditComponent, prevPointEditComponent);
+      this.#mode = Mode.DEFAULT;
     }
 
     remove(prevPointComponent);
@@ -102,11 +105,34 @@ export default class PointPresenter {
     this.#replaceCardToForm();
   };
 
-  #handleFormSubmit = () => {
+  #handleFormSubmit = (updatedPoint) => {
+    const isMinorUpdate = !isDatesEqual(this.#point.dateFrom, updatedPoint.dateFrom)
+    || !isDatesEqual(this.#point.dateTo, updatedPoint.dateTo)
+    || !isPricesEqual(this.#point.basePrice, updatedPoint.basePrice)
+    || this.#point.offers.length !== updatedPoint.offers.length;
+
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      updatedPoint
+    );
     this.#replaceFormToCard();
   };
 
   #handleFavouriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    const update = {...this.#point, isFavorite: !this.#point.isFavorite};
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
+      update
+    );
+  };
+
+  #handleDeleteClick = (update) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      update,
+    );
   };
 }

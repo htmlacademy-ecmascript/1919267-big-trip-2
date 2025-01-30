@@ -58,5 +58,42 @@ const AvailableSortType = {
 };
 
 const DEFAULT_SORT_TYPE = SortType.DAY;
+const DEFAULT_FILTER_TYPE = FilterType.EVERYTHING;
 
-export {BLANK_POINT, Price, MILLISECONDS_IN_MINUTES, SECONDS_IN_MINUTES, HOURS_IN_DAY, DateFormat, MONTHS, FilterType, Mode, SortType, AvailableSortType, DEFAULT_SORT_TYPE};
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+const FilterTypeNoItemsMessage = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.PAST]: 'There are no past events now',
+};
+
+export {
+  BLANK_POINT,
+  Price,
+  MILLISECONDS_IN_MINUTES,
+  SECONDS_IN_MINUTES,
+  HOURS_IN_DAY,
+  DateFormat,
+  MONTHS,
+  FilterType,
+  Mode,
+  SortType,
+  AvailableSortType,
+  DEFAULT_SORT_TYPE,
+  DEFAULT_FILTER_TYPE,
+  UserAction,
+  UpdateType,
+  FilterTypeNoItemsMessage
+};

@@ -1,3 +1,4 @@
+import { UpdateType, UserAction } from '../const.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
 import PointEditView from '../view/point-edit-view.js';
 
@@ -7,12 +8,14 @@ export default class NewPointPresenter {
   #destinations = null;
   #offers = null;
 
+  #handleDataChange = null;
   #handleNewPointDestroy = null;
 
-  constructor ({pointsListContainer, destinations, offers, onNewPointDestroy}) {
+  constructor ({pointsListContainer, destinations, offers, onDataChange, onNewPointDestroy}) {
     this.#pointsListContainer = pointsListContainer;
     this.#destinations = destinations;
     this.#offers = offers;
+    this.#handleDataChange = onDataChange;
     this.#handleNewPointDestroy = onNewPointDestroy;
   }
 
@@ -25,8 +28,8 @@ export default class NewPointPresenter {
       offers: this.#offers,
       destinations: this.#destinations,
       isNewPoint: true,
-      onArrowClick: () => {},
-      onFormSubmit: () => {}
+      onFormSubmit: this.#handleFormSubmit,
+      onDeleteClick: this.#handleCancelClick,
     });
 
     render(
@@ -50,6 +53,18 @@ export default class NewPointPresenter {
 
     document.removeEventListener('keydown', this.#escapeKeyDownHandler);
   }
+
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(
+      UserAction.ADD_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+  };
+
+  #handleCancelClick = () => {
+    this.destroy();
+  };
 
   #escapeKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
