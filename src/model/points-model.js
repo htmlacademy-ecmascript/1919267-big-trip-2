@@ -1,8 +1,5 @@
 import { UpdateType } from '../const.js';
 import Observable from '../framework/observable.js';
-import { mockDestinations } from '../mock/destinations';
-import { mockOffers } from '../mock/offers.js';
-import { getMockPoints } from '../mock/points.js';
 import AdapterService from '../service/adapter-service.js';
 
 export default class PointsModel extends Observable {

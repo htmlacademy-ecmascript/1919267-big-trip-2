@@ -1,7 +1,6 @@
 import he from 'he';
 import { BLANK_POINT, DateFormat } from '../const.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { mockOffers } from '../mock/offers.js';
 import { capitalizeFirstLetter } from '../utils/common.js';
 import { formatDate } from '../utils/date.js';
 import { getDestinationById, getDestinationIdByName, getOffersByType } from '../utils/point.js';
@@ -81,7 +80,7 @@ function createOffersListTemplate (allOffersAvailable, checkedOffersIds) {
 function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
   const {id, type, dateFrom, dateTo, basePrice, offers: checkedOffersIds, isSubmitDisabled} = state;
   const destination = getDestinationById(destinations, state.destination);
-  const pointTypes = mockOffers.map((offer) => offer.type);
+  const pointTypes = offers.map((offer) => offer.type);
   const allOffersAvailable = getOffersByType(offers, type);
 
   const rollupButtonTemplate = !isNewPoint
