@@ -70,6 +70,8 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
+  FAILED: 'FAILED'
 };
 
 const FilterTypeNoItemsMessage = {
@@ -77,6 +79,25 @@ const FilterTypeNoItemsMessage = {
   [FilterType.FUTURE]: 'There are no future events now',
   [FilterType.PRESENT]: 'There are no present events now',
   [FilterType.PAST]: 'There are no past events now',
+};
+
+const AUTHORIZATION = 'Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
+
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT'
+};
+
+const Url = {
+  POINTS: 'points',
+  DESTINATIONS: 'destinations',
+  OFFERS: 'offers',
+};
+
+const LoadingMessage = {
+  LOADING: 'Loading...',
+  FAILED: 'Failed to load latest route information'
 };
 
 export {
@@ -95,5 +116,10 @@ export {
   DEFAULT_FILTER_TYPE,
   UserAction,
   UpdateType,
-  FilterTypeNoItemsMessage
+  FilterTypeNoItemsMessage,
+  AUTHORIZATION,
+  END_POINT,
+  Method,
+  Url,
+  LoadingMessage
 };

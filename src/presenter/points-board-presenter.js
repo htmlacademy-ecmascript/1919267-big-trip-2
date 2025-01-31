@@ -1,7 +1,8 @@
-import { DEFAULT_FILTER_TYPE, DEFAULT_SORT_TYPE, UpdateType, UserAction } from '../const.js';
+import { DEFAULT_FILTER_TYPE, DEFAULT_SORT_TYPE, LoadingMessage, UpdateType, UserAction } from '../const.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
 import { filterPoints } from '../utils/filter.js';
 import {sortItems} from '../utils/sorting.js';
+import LoadingMessageView from '../view/loading-message-view.js';
 import NoPointsView from '../view/no-points-view.js';
 import PointsBoardView from '../view/points-board-view.js';
 import PointsListView from '../view/points-list-view.js';
@@ -18,6 +19,10 @@ export default class PointsBoardPresenter {
   #pointsPresenters = new Map();
   #currentSortType = DEFAULT_SORT_TYPE;
   #currentFilterType = DEFAULT_FILTER_TYPE;
+  #isLoading = true;
+  #isFailed = false;
+  #loadingComponent = new LoadingMessageView(LoadingMessage.LOADING);
+  #failedLoadingComponent = new LoadingMessageView(LoadingMessage.FAILED);
 
   #newPointPresenter = null;
   #tripSortComponent = null;
@@ -54,13 +59,6 @@ export default class PointsBoardPresenter {
   }
 
   init() {
-    this.#newPointPresenter = new NewPointPresenter({
-      pointsListContainer: this.#pointsListComponent.element,
-      destinations: this.destinations,
-      offers: this.offers,
-      onDataChange: this.#handleViewAction,
-      onNewPointDestroy: this.#handleNewPointCancel
-    });
     this.#renderBoard();
   }
 
@@ -91,8 +89,36 @@ export default class PointsBoardPresenter {
         this.#clearBoard(true);
         this.#renderBoard();
         break;
+      case UpdateType.INIT:
+        this.#isFailed = false;
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#newPointPresenter = new NewPointPresenter({
+          pointsListContainer: this.#pointsListComponent.element,
+          destinations: this.destinations,
+          offers: this.offers,
+          onDataChange: this.#handleViewAction,
+          onNewPointDestroy: this.#handleNewPointCancel
+        });
+        this.#renderBoard();
+        break;
+      case UpdateType.FAILED:
+        this.#isLoading = false;
+        this.#isFailed = true;
+        remove(this.#loadingComponent);
+        remove(this.#noPointsComponent);
+        this.#renderFailedLoading();
+        break;
     }
   };
+
+  #renderLoading () {
+    render(this.#loadingComponent, this.#pointsBoardComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderFailedLoading () {
+    render(this.#failedLoadingComponent, this.#pointsBoardComponent.element, RenderPosition.AFTERBEGIN);
+  }
 
   createNewPoint() {
     this.#currentSortType = DEFAULT_SORT_TYPE;
@@ -133,6 +159,11 @@ export default class PointsBoardPresenter {
   #renderBoard () {
     render(this.#pointsBoardComponent, this.#pointsBoardContainer);
 
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
@@ -170,6 +201,7 @@ export default class PointsBoardPresenter {
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());
     this.#pointsPresenters.clear();
 
+    remove(this.#loadingComponent);
     remove(this.#tripSortComponent);
     if (this.#noPointsComponent) {
       remove(this.#noPointsComponent);

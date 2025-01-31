@@ -1,12 +1,36 @@
+import { UpdateType } from '../const.js';
 import Observable from '../framework/observable.js';
 import { mockDestinations } from '../mock/destinations';
 import { mockOffers } from '../mock/offers.js';
 import { getMockPoints } from '../mock/points.js';
+import AdapterService from '../service/adapter-service.js';
 
 export default class PointsModel extends Observable {
-  #points = getMockPoints();
-  #offers = mockOffers;
-  #destinations = mockDestinations;
+  #adapterService = new AdapterService();
+  #pointsApiService = null;
+  #points = [];
+  #offers = [];
+  #destinations = [];
+
+  constructor ({pointsApiService}) {
+    super();
+    this.#pointsApiService = pointsApiService;
+  }
+
+  async init() {
+    try {
+      const points = await this.#pointsApiService.points;
+      this.#points = points.map(this.#adapterService.adaptToClient);
+      this.#offers = await this.#pointsApiService.offers;
+      this.#destinations = await this.#pointsApiService.destinations;
+      this._notify(UpdateType.INIT);
+    } catch (error) {
+      this.#points = [];
+      this.#offers = [];
+      this.#destinations = [];
+      this._notify(UpdateType.FAILED);
+    }
+  }
 
   get points () {
     return this.#points;
