@@ -41,19 +41,26 @@ export default class PointsModel extends Observable {
     return this.#destinations;
   }
 
-  updatePoint(updateType, updatedPoint) {
+  async updatePoint(updateType, updatedPoint) {
     const index = this.#points.findIndex((point) => point.id === updatedPoint.id);
 
     if (index === -1) {
       throw new Error('Point does not exist');
     }
 
-    this.#points = [
-      ...this.#points.slice(0, index),
-      updatedPoint,
-      ...this.#points.slice(index + 1),
-    ];
-    this._notify(updateType, updatedPoint);
+    try {
+      const response = await this.#pointsApiService.updatePoint(updatedPoint);
+      const pointForUpdate = this.#adapterService.adaptToServer(response);
+
+      this.#points = [
+        ...this.#points.slice(0, index),
+        pointForUpdate,
+        ...this.#points.slice(index + 1),
+      ];
+      this._notify(updateType, pointForUpdate);
+    } catch (error) {
+      throw new Error('Cannot update point');
+    }
   }
 
   addPoint (updateType, newPoint) {

@@ -9,10 +9,10 @@ export default class AdapterService {
       'is_favorite': point.isFavorite
     };
 
-    delete point.basePrice;
-    delete point.dateFrom;
-    delete point.dateTo;
-    delete point.isFavorite;
+    delete adaptedPoint.basePrice;
+    delete adaptedPoint.dateFrom;
+    delete adaptedPoint.dateTo;
+    delete adaptedPoint.isFavorite;
 
     return adaptedPoint;
   }
