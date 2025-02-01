@@ -35,7 +35,7 @@ function createPointItemTemplate({point, offers, destinations}) {
           <p class="event__duration">${getDuration(dateFrom, dateTo)}</p>
         </div>
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
+          &euro;&nbsp;<span class="event__price-value">${String(basePrice)}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">

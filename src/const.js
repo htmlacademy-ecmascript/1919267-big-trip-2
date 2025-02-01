@@ -86,7 +86,9 @@ const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip';
 
 const Method = {
   GET: 'GET',
-  PUT: 'PUT'
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE'
 };
 
 const Url = {
