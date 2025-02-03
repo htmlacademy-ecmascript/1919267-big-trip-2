@@ -72,4 +72,11 @@ export default class NewPointPresenter {
       this.destroy();
     }
   };
+
+  setSaving () {
+    this.#pointEditComponent.updateElement({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
 }

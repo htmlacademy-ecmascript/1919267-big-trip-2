@@ -49,12 +49,20 @@ function createDestinationsBlockTemplate(destination, destinations) {
 }
 
 //OFFERS BLOCK
-function createOfferTemplate (offer, checkedOffers) {
+function createOfferTemplate (isDisabled, offer, checkedOffers) {
   const {id, title, price} = offer;
-  const isCheckedOffer = checkedOffers.includes(id) ? 'checked' : '';
+  const isCheckedOffer = checkedOffers.includes(id);
 
   return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" data-offer-id=${he.encode(id)} id="event-offer-${he.encode(id)}-1" type="checkbox" name="event-offer-${he.encode(id)}" ${isCheckedOffer}>
+    <input
+      class="event__offer-checkbox  visually-hidden"
+      data-offer-id=${he.encode(id)}
+      id="event-offer-${he.encode(id)}-1"
+      type="checkbox"
+      name="event-offer-${he.encode(id)}"
+      ${isCheckedOffer ? 'checked' : ''}
+      ${isDisabled ? 'disabled' : ''}
+    >
     <label class="event__offer-label" for="event-offer-${he.encode(id)}-1">
       <span class="event__offer-title">${he.encode(title)}</span>
       &plus;&euro;&nbsp;
@@ -63,7 +71,8 @@ function createOfferTemplate (offer, checkedOffers) {
   </div>`;
 }
 
-function createOffersListTemplate (allOffersAvailable, checkedOffersIds) {
+function createOffersListTemplate (state, allOffersAvailable, checkedOffersIds) {
+  const {isDisabled} = state;
   if (allOffersAvailable.length === 0) {
     return '';
   }
@@ -72,16 +81,28 @@ function createOffersListTemplate (allOffersAvailable, checkedOffersIds) {
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
     <div class="event__available-offers">
-    ${allOffersAvailable.map((offer) => createOfferTemplate(offer, checkedOffersIds)).join('')}
+    ${allOffersAvailable.map((offer) => createOfferTemplate(isDisabled, offer, checkedOffersIds)).join('')}
     </div>
   </section>`;
 }
 
 function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
-  const {id, type, dateFrom, dateTo, basePrice, offers: checkedOffersIds, isSubmitDisabled} = state;
+  const {
+    id,
+    type,
+    dateFrom,
+    dateTo,
+    basePrice,
+    offers: checkedOffersIds,
+    isSubmitDisabled,
+    isSaving,
+    isDeleting,
+    isDisabled
+  } = state;
   const destination = getDestinationById(destinations, state.destination);
   const pointTypes = offers.map((offer) => offer.type);
   const allOffersAvailable = getOffersByType(offers, type);
+  const isDataDeleting = isDeleting ? 'Deleting...' : 'Delete';
 
   const rollupButtonTemplate = !isNewPoint
     ? `<button class="event__rollup-btn" type="button">
@@ -120,6 +141,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       value="${he.encode(destination.name ?? '')}"
                       list="destination-list-1"
                       data-field-validated=""
+                      ${isDisabled ? 'disabled' : ''}
                     >
                     <datalist id="destination-list-1">
                       ${createDestinationsListTemplate(destinations)}
@@ -135,6 +157,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       name="event-start-time"
                       value="${formatDate(dateFrom, DateFormat.FULL_DATE)}"
                       data-field-validated=""
+                      ${isDisabled ? 'disabled' : ''}
                     >
                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
@@ -145,6 +168,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       name="event-end-time"
                       value="${formatDate(dateTo, DateFormat.FULL_DATE)}"
                       data-field-validated=""
+                      ${isDisabled ? 'disabled' : ''}
                     >
                   </div>
 
@@ -153,7 +177,15 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${he.encode(String(basePrice))}>
+                    <input
+                      class="event__input  event__input--price"
+                      id="event-price-1"
+                      type="text"
+                      name="event-price"
+                      value=${he.encode(String(basePrice))}
+                      ${isDisabled ? 'disabled' : ''}
+                      required
+                    >
                   </div>
 
                   <button
@@ -161,15 +193,15 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                     type="submit"
                     ${isSubmitDisabled ? 'disabled' : ''}
                   >
-                    Save
+                    ${isSaving ? 'Saving...' : 'Save'}
                   </button>
                   <button class="event__reset-btn" type="reset">
-                  ${isNewPoint ? 'Cancel' : 'Delete'}
+                  ${isNewPoint ? 'Cancel' : isDataDeleting}
                   </button>
                   ${rollupButtonTemplate}
                 </header>
                 <section class="event__details">
-                  ${createOffersListTemplate(allOffersAvailable, checkedOffersIds)}
+                  ${createOffersListTemplate(state, allOffersAvailable, checkedOffersIds)}
                   ${createDestinationsBlockTemplate(destination, destinations)}
                 </section>
               </form>
@@ -276,7 +308,10 @@ export default class PointEditView extends AbstractStatefulView {
 
     return {
       ...point,
-      isSubmitDisabled
+      isSubmitDisabled,
+      isSaving: false,
+      isDeleting: false,
+      isDisabled: false
     };
   };
 
@@ -284,6 +319,9 @@ export default class PointEditView extends AbstractStatefulView {
     const point = {...state};
 
     delete point.isSubmitDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+    delete point.isDisabled;
 
     return point;
   };
