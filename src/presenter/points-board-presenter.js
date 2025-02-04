@@ -62,19 +62,31 @@ export default class PointsBoardPresenter {
     this.#renderBoard();
   }
 
-  #handleViewAction = (actionType, updateType, updatedItem) => {
+  #handleViewAction = async (actionType, updateType, updatedItem) => {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsPresenters.get(updatedItem.id).setSaving();
-        this.#pointsModel.updatePoint(updateType, updatedItem);
+        try {
+          await this.#pointsModel.updatePoint(updateType, updatedItem);
+        } catch (error) {
+          this.#pointsPresenters.get(updatedItem.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
         this.#newPointPresenter.setSaving();
-        this.#pointsModel.addPoint(updateType, updatedItem);
+        try {
+          await this.#pointsModel.addPoint(updateType, updatedItem);
+        } catch (error) {
+          this.#newPointPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
         this.#pointsPresenters.get(updatedItem.id).setDeleting();
-        this.#pointsModel.deletePoint(updateType, updatedItem);
+        try {
+          await this.#pointsModel.deletePoint(updateType, updatedItem);
+        } catch (error) {
+          this.#pointsPresenters.get(updatedItem.id).setAborting();
+        }
         break;
     }
   };
