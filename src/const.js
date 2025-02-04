@@ -102,6 +102,11 @@ const LoadingMessage = {
   FAILED: 'Failed to load latest route information'
 };
 
+const TimeLimit = {
+  LOWER_LIMIT: 300,
+  UPPER_LIMIT: 1000,
+};
+
 export {
   BLANK_POINT,
   Price,
@@ -123,5 +128,6 @@ export {
   END_POINT,
   Method,
   Url,
-  LoadingMessage
+  LoadingMessage,
+  TimeLimit
 };

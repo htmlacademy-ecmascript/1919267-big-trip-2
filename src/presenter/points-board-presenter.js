@@ -1,5 +1,6 @@
-import { DEFAULT_FILTER_TYPE, DEFAULT_SORT_TYPE, LoadingMessage, UpdateType, UserAction } from '../const.js';
+import { DEFAULT_FILTER_TYPE, DEFAULT_SORT_TYPE, LoadingMessage, TimeLimit, UpdateType, UserAction } from '../const.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { filterPoints } from '../utils/filter.js';
 import {sortItems} from '../utils/sorting.js';
 import LoadingMessageView from '../view/loading-message-view.js';
@@ -33,6 +34,11 @@ export default class PointsBoardPresenter {
 
   #handleNewPointFormClose = null;
 
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT,
+  });
+
   constructor({tripMainContainer, pointsBoardContainer, pointsModel, filtersModel, onNewPointFormClose}) {
     this.#pointsBoardContainer = pointsBoardContainer;
     this.#tripMainContainer = tripMainContainer;
@@ -63,6 +69,7 @@ export default class PointsBoardPresenter {
   }
 
   #handleViewAction = async (actionType, updateType, updatedItem) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsPresenters.get(updatedItem.id).setSaving();
@@ -89,6 +96,7 @@ export default class PointsBoardPresenter {
         }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
