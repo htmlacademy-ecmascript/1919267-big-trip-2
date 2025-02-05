@@ -82,7 +82,7 @@ const FilterTypeNoItemsMessage = {
 };
 
 const AUTHORIZATION = 'Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
-const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const Method = {
   GET: 'GET',

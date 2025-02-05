@@ -130,6 +130,7 @@ export default class PointsBoardPresenter {
         this.#isFailed = true;
         remove(this.#loadingComponent);
         remove(this.#noPointsComponent);
+        remove(this.#tripSortComponent);
         this.#renderFailedLoading();
         break;
     }
@@ -140,7 +141,7 @@ export default class PointsBoardPresenter {
   }
 
   #renderFailedLoading () {
-    render(this.#failedLoadingComponent, this.#pointsBoardComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#failedLoadingComponent, this.#pointsBoardComponent.element, RenderPosition.BEFOREEND);
   }
 
   createNewPoint() {
@@ -220,7 +221,9 @@ export default class PointsBoardPresenter {
 
   #clearBoard (resetSortType = false) {
     this.#newPointPresenter.destroy();
-    this.#tripInfoPresenter.destroy();
+    if (this.#tripInfoPresenter !== null) {
+      this.#tripInfoPresenter.destroy();
+    }
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());
     this.#pointsPresenters.clear();
 

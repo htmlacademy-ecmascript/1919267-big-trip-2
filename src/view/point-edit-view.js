@@ -20,13 +20,13 @@ function createDestinationsListTemplate(destinations) {
 }
 
 //DESTINATIONS BLOCK
-function createDestinationPhotosTemplate(pointDestination) {
-  if (!pointDestination?.photos || pointDestination?.photos.length === 0) {
+function createDestinationPhotosTemplate(pictures) {
+  if (pictures.length === 0) {
     return '';
   }
 
-  const photos = pointDestination.photos.map((photo) =>
-    `<img class="event__photo" src="${he.encode(photo)}" alt="${he.encode(pointDestination.name)}">`
+  const photos = pictures.map(({src, description}) =>
+    `<img class="event__photo" src="${he.encode(src)}" alt="${he.encode(description)}">`
   ).join('');
 
   return `<div class="event__photos-container">
@@ -37,14 +37,14 @@ function createDestinationPhotosTemplate(pointDestination) {
 function createDestinationsBlockTemplate(destination, destinations) {
   const pointDestination = destinations.find((item) => item.id === destination.id);
 
-  if (!pointDestination || !pointDestination.description) {
+  if (!pointDestination || !pointDestination.description || pointDestination.description.length === 0) {
     return '';
   }
 
   return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${he.encode(pointDestination.description)}</p>
-      ${createDestinationPhotosTemplate(pointDestination)}
+      ${createDestinationPhotosTemplate(pointDestination.pictures)}
     </section>`;
 }
 
