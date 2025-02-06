@@ -23,41 +23,30 @@ function formatDate(date, dateFormat) {
  * @returns {string}
  */
 
-// function getDuration(dateFrom, dateTo){
-//   const diff = dayjs(dateTo).diff(dayjs(dateFrom));
-
-//   if (diff >= MSEC_IN_DAY) {
-//     return dayjs.duration(diff).format('DD[D] HH[H] mm[M]');
-//   }
-//   if (diff >= MSEC_IN_HOUR) {
-//     return dayjs.duration(diff).format('HH[H] mm[M]');
-//   }
-//   return dayjs.duration(diff).format('mm[M]');
-// }
-
-function getDuration (pointDateStart, pointDateEnd) {
-  if (pointDateStart && pointDateEnd) {
-    const dateStart = dayjs(pointDateStart);
-    const dateEnd = dayjs(pointDateEnd);
-    const durationInUnits = dayjs.duration(dateEnd.diff(dateStart));
-    const { $d } = durationInUnits;
-    if ($d.months > 0) {
-      const monthsInMil = dayjs.duration($d.months, 'month');
-      $d.days += dayjs.duration(monthsInMil.$ms).asDays();
-    }
-    if ($d.years > 0) {
-      const yearsInMilliseconds = dayjs.duration($d.years, 'year');
-      $d.days += dayjs.duration(yearsInMilliseconds.$ms).asDays();
-    }
-    if ($d.days > 0) {
-      return durationInUnits.format('DD[D] HH[H] mm[M]');
-    }
-    if ($d.hours > 0) {
-      return durationInUnits.format('HH[H] mm[M]');
-    }
-    return durationInUnits.format('mm[M]');
+function getDuration (dateFrom, dateTo) {
+  if (!dateFrom && !dateTo) {
+    return '';
   }
-  return '';
+
+  const dateStart = dayjs(dateFrom);
+  const dateEnd = dayjs(dateTo);
+  const durationInUnits = dayjs.duration(dateEnd.diff(dateStart));
+  const { $d: durationUnitsObject } = durationInUnits;
+  if (durationUnitsObject.months > 0) {
+    const monthsInMilliseconds = dayjs.duration(durationUnitsObject.months, 'month');
+    durationUnitsObject.days += dayjs.duration(monthsInMilliseconds.$ms).asDays();
+  }
+  if (durationUnitsObject.years > 0) {
+    const yearsInMilliseconds = dayjs.duration(durationUnitsObject.years, 'year');
+    durationUnitsObject.days += dayjs.duration(yearsInMilliseconds.$ms).asDays();
+  }
+  if (durationUnitsObject.days > 0) {
+    return durationInUnits.format('DD[D] HH[H] mm[M]');
+  }
+  if (durationUnitsObject.hours > 0) {
+    return durationInUnits.format('HH[H] mm[M]');
+  }
+  return durationInUnits.format('mm[M]');
 }
 
 function isDatesEqual (dateA, dateB) {

@@ -103,6 +103,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
   const pointTypes = offers.map((offer) => offer.type);
   const allOffersAvailable = getOffersByType(offers, type);
   const isDataDeleting = isDeleting ? 'Deleting...' : 'Delete';
+  const isDisabledAttribute = isDisabled ? 'disabled' : '';
 
   const rollupButtonTemplate = !isNewPoint
     ? `<button class="event__rollup-btn" type="button">
@@ -141,7 +142,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       value="${he.encode(destination.name ?? '')}"
                       list="destination-list-1"
                       data-field-validated=""
-                      ${isDisabled ? 'disabled' : ''}
+                      ${isDisabledAttribute}
                     >
                     <datalist id="destination-list-1">
                       ${createDestinationsListTemplate(destinations)}
@@ -157,7 +158,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       name="event-start-time"
                       value="${formatDate(dateFrom, DateFormat.FULL_DATE)}"
                       data-field-validated=""
-                      ${isDisabled ? 'disabled' : ''}
+                      ${isDisabledAttribute}
                     >
                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
@@ -168,7 +169,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       name="event-end-time"
                       value="${formatDate(dateTo, DateFormat.FULL_DATE)}"
                       data-field-validated=""
-                      ${isDisabled ? 'disabled' : ''}
+                      ${isDisabledAttribute}
                     >
                   </div>
 
@@ -183,7 +184,7 @@ function createPointEditTemplate({state, offers, destinations, isNewPoint}) {
                       type="text"
                       name="event-price"
                       value=${he.encode(String(basePrice))}
-                      ${isDisabled ? 'disabled' : ''}
+                      ${isDisabledAttribute}
                       required
                     >
                   </div>
