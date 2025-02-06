@@ -82,7 +82,7 @@ const FilterTypeNoItemsMessage = {
 };
 
 const AUTHORIZATION = 'Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
-const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const Method = {
   GET: 'GET',
@@ -100,6 +100,11 @@ const Url = {
 const LoadingMessage = {
   LOADING: 'Loading...',
   FAILED: 'Failed to load latest route information'
+};
+
+const TimeLimit = {
+  LOWER_LIMIT: 300,
+  UPPER_LIMIT: 1000,
 };
 
 export {
@@ -123,5 +128,6 @@ export {
   END_POINT,
   Method,
   Url,
-  LoadingMessage
+  LoadingMessage,
+  TimeLimit
 };

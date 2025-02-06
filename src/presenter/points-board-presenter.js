@@ -1,5 +1,6 @@
-import { DEFAULT_FILTER_TYPE, DEFAULT_SORT_TYPE, LoadingMessage, UpdateType, UserAction } from '../const.js';
+import { DEFAULT_FILTER_TYPE, DEFAULT_SORT_TYPE, LoadingMessage, TimeLimit, UpdateType, UserAction } from '../const.js';
 import { remove, render, RenderPosition } from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { filterPoints } from '../utils/filter.js';
 import {sortItems} from '../utils/sorting.js';
 import LoadingMessageView from '../view/loading-message-view.js';
@@ -33,6 +34,11 @@ export default class PointsBoardPresenter {
 
   #handleNewPointFormClose = null;
 
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT,
+  });
+
   constructor({tripMainContainer, pointsBoardContainer, pointsModel, filtersModel, onNewPointFormClose}) {
     this.#pointsBoardContainer = pointsBoardContainer;
     this.#tripMainContainer = tripMainContainer;
@@ -62,18 +68,35 @@ export default class PointsBoardPresenter {
     this.#renderBoard();
   }
 
-  #handleViewAction = (actionType, updateType, updatedItem) => {
+  #handleViewAction = async (actionType, updateType, updatedItem) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointsModel.updatePoint(updateType, updatedItem);
+        this.#pointsPresenters.get(updatedItem.id).setSaving();
+        try {
+          await this.#pointsModel.updatePoint(updateType, updatedItem);
+        } catch (error) {
+          this.#pointsPresenters.get(updatedItem.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointsModel.addPoint(updateType, updatedItem);
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointsModel.addPoint(updateType, updatedItem);
+        } catch (error) {
+          this.#newPointPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointsModel.deletePoint(updateType, updatedItem);
+        this.#pointsPresenters.get(updatedItem.id).setDeleting();
+        try {
+          await this.#pointsModel.deletePoint(updateType, updatedItem);
+        } catch (error) {
+          this.#pointsPresenters.get(updatedItem.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -107,6 +130,7 @@ export default class PointsBoardPresenter {
         this.#isFailed = true;
         remove(this.#loadingComponent);
         remove(this.#noPointsComponent);
+        remove(this.#tripSortComponent);
         this.#renderFailedLoading();
         break;
     }
@@ -117,7 +141,7 @@ export default class PointsBoardPresenter {
   }
 
   #renderFailedLoading () {
-    render(this.#failedLoadingComponent, this.#pointsBoardComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#failedLoadingComponent, this.#pointsBoardComponent.element, RenderPosition.BEFOREEND);
   }
 
   createNewPoint() {
@@ -197,7 +221,9 @@ export default class PointsBoardPresenter {
 
   #clearBoard (resetSortType = false) {
     this.#newPointPresenter.destroy();
-    this.#tripInfoPresenter.destroy();
+    if (this.#tripInfoPresenter !== null) {
+      this.#tripInfoPresenter.destroy();
+    }
     this.#pointsPresenters.forEach((presenter) => presenter.destroy());
     this.#pointsPresenters.clear();
 

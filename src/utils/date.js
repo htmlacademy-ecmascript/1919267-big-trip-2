@@ -5,14 +5,6 @@ import durationPlugin from 'dayjs/plugin/duration';
 dayjs.extend(minMax);
 dayjs.extend(durationPlugin);
 
-const MSEC_IN_SEC = 1000;
-const SEC_IN_MIN = 60;
-const MIN_IN_HOUR = 60;
-const HOUR_IN_DAY = 24;
-
-const MSEC_IN_HOUR = MSEC_IN_SEC * SEC_IN_MIN * MIN_IN_HOUR;
-const MSEC_IN_DAY = MSEC_IN_HOUR * HOUR_IN_DAY;
-
 /**
  * Функция, возвращающая отформатированную дату
  * @param {dayjs.ConfigType} date
@@ -31,16 +23,30 @@ function formatDate(date, dateFormat) {
  * @returns {string}
  */
 
-function getDuration(dateFrom, dateTo){
-  const diff = dayjs(dateTo).diff(dayjs(dateFrom));
+function getDuration (dateFrom, dateTo) {
+  if (!dateFrom && !dateTo) {
+    return '';
+  }
 
-  if (diff >= MSEC_IN_DAY) {
-    return dayjs.duration(diff).format('DD[D] HH[H] mm[M]');
+  const dateStart = dayjs(dateFrom);
+  const dateEnd = dayjs(dateTo);
+  const durationInUnits = dayjs.duration(dateEnd.diff(dateStart));
+  const { $d: durationUnitsObject } = durationInUnits;
+  if (durationUnitsObject.months > 0) {
+    const monthsInMilliseconds = dayjs.duration(durationUnitsObject.months, 'month');
+    durationUnitsObject.days += dayjs.duration(monthsInMilliseconds.$ms).asDays();
   }
-  if (diff >= MSEC_IN_HOUR) {
-    return dayjs.duration(diff).format('HH[H] mm[M]');
+  if (durationUnitsObject.years > 0) {
+    const yearsInMilliseconds = dayjs.duration(durationUnitsObject.years, 'year');
+    durationUnitsObject.days += dayjs.duration(yearsInMilliseconds.$ms).asDays();
   }
-  return dayjs.duration(diff).format('mm[M]');
+  if (durationUnitsObject.days > 0) {
+    return durationInUnits.format('DD[D] HH[H] mm[M]');
+  }
+  if (durationUnitsObject.hours > 0) {
+    return durationInUnits.format('HH[H] mm[M]');
+  }
+  return durationInUnits.format('mm[M]');
 }
 
 function isDatesEqual (dateA, dateB) {

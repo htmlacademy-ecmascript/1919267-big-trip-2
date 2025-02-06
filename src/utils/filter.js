@@ -6,7 +6,7 @@ function isPointFuture(point) {
 }
 
 function isPointPresent(point) {
-  return dayjs().isBefore(point.dateFrom) && dayjs().isAfter(point.dateTo);
+  return dayjs().isAfter(point.dateFrom) && dayjs().isBefore(point.dateTo);
 }
 
 function isPointPast(point) {
@@ -15,15 +15,12 @@ function isPointPast(point) {
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => [...points],
-  [FilterType.PAST]: (points) => points.filter((point) => isPointPast(point)),
   [FilterType.FUTURE]: (points) => points.filter((point) => isPointFuture(point)),
-  [FilterType.PRESENT]: (points) => points.filter((point) => isPointPresent(point))
+  [FilterType.PRESENT]: (points) => points.filter((point) => isPointPresent(point)),
+  [FilterType.PAST]: (points) => points.filter((point) => isPointPast(point)),
 };
 
-const filterPoints = (points, filterType) => {
-  const newFilteredPoints = filter[filterType](points);
-  return newFilteredPoints;
-};
+const filterPoints = (points, filterType) => (filter[filterType])(points);
 
 const generateFilters = (points) => Object.entries(filter).map(
   ([filterType, filterMethod]) => ({
