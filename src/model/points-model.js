@@ -8,6 +8,7 @@ export default class PointsModel extends Observable {
   #points = [];
   #offers = [];
   #destinations = [];
+  #isFailed = false;
 
   constructor ({pointsApiService}) {
     super();
@@ -22,9 +23,7 @@ export default class PointsModel extends Observable {
       this.#destinations = await this.#pointsApiService.destinations;
       this._notify(UpdateType.INIT);
     } catch (error) {
-      this.#points = [];
-      this.#offers = [];
-      this.#destinations = [];
+      this.#isFailed = true;
       this._notify(UpdateType.FAILED);
     }
   }
@@ -39,6 +38,10 @@ export default class PointsModel extends Observable {
 
   get destinations () {
     return this.#destinations;
+  }
+
+  get isFailed() {
+    return this.#isFailed;
   }
 
   async updatePoint(updateType, updatedPoint) {

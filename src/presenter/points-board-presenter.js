@@ -21,7 +21,6 @@ export default class PointsBoardPresenter {
   #currentSortType = DEFAULT_SORT_TYPE;
   #currentFilterType = DEFAULT_FILTER_TYPE;
   #isLoading = true;
-  #isFailed = false;
   #loadingComponent = new LoadingMessageView(LoadingMessage.LOADING);
   #failedLoadingComponent = new LoadingMessageView(LoadingMessage.FAILED);
 
@@ -113,7 +112,6 @@ export default class PointsBoardPresenter {
         this.#renderBoard();
         break;
       case UpdateType.INIT:
-        this.#isFailed = false;
         this.#isLoading = false;
         remove(this.#loadingComponent);
         this.#newPointPresenter = new NewPointPresenter({
@@ -127,7 +125,6 @@ export default class PointsBoardPresenter {
         break;
       case UpdateType.FAILED:
         this.#isLoading = false;
-        this.#isFailed = true;
         remove(this.#loadingComponent);
         remove(this.#noPointsComponent);
         remove(this.#tripSortComponent);
