@@ -47,5 +47,8 @@ function handleNewPointFormClose () {
 filtersPresenter.init();
 pointsBoardPresenter.init();
 pointsModel.init().finally(() => {
+  if (pointsModel.isFailure) {
+    return;
+  }
   newPointButtonComponent.element.disabled = false;
 });
